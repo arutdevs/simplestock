@@ -6,33 +6,35 @@
 @use "sass:color";
 
 // -----------------------------------------------------------------------------
-// สี (Colors)
+// สี (Colors) - Modern Inventory Theme
 // -----------------------------------------------------------------------------
 
-// Primary Colors
-$primary-color: #007bff;
-$secondary-color: #6c757d;
-$success-color: #28a745;
-$danger-color: #dc3545;
-$warning-color: #ffc107;
-$info-color: #17a2b8;
-$light-color: #f8f9fa;
-$dark-color: #343a40;
+// Primary Colors - ใช้ Indigo สมัยใหม่สำหรับระบบจัดการ
+$primary-color: #6366F1;        // Indigo - สีหลักสวยทันสมัย
+$secondary-color: #64748B;      // Slate - สีรอง
+$success-color: #10B981;        // Emerald - เขียวสดใส
+$danger-color: #EF4444;         // Red - แดงสด
+$warning-color: #F59E0B;        // Amber - เหลืองส้ม
+$info-color: #3B82F6;           // Blue - น้ำเงินสดใส
+$light-color: #F8FAFC;          // ขาวนวล
+$dark-color: #1E293B;           // Slate เข้ม
 
-// Text Colors
-$text-primary: #212529;
-$text-secondary: #6c757d;
-$text-muted: #999999;
-$text-white: #ffffff;
+// Text Colors - อ่านง่าย สบายตา
+$text-primary: #1E293B;         // สีเข้มหลัก
+$text-secondary: #64748B;       // สีเทาปานกลาง
+$text-muted: #94A3B8;           // สีเทาอ่อน
+$text-white: #FFFFFF;           // ขาว
 
-// Background Colors
-$bg-primary: #ffffff;
-$bg-secondary: #f8f9fa;
-$bg-dark: #343a40;
+// Background Colors - สบายตา ใช้งานได้นาน
+$bg-primary: #FFFFFF;           // ขาวสะอาด
+$bg-secondary: #F8FAFC;         // ขาวนวล
+$bg-tertiary: #F1F5F9;          // เทาอ่อนมาก
+$bg-dark: #0F172A;              // เข้มมาก
 
-// Border Colors
-$border-color: #dee2e6;
-$border-light: #e9ecef;
+// Border Colors - นุ่มนวล
+$border-color: #E2E8F0;          // เทาอ่อน
+$border-light: #F1F5F9;          // เทาอ่อนมาก
+$border-dark: #CBD5E1;           // เทาเข้มหน่อย
 
 // -----------------------------------------------------------------------------
 // Typography
@@ -84,23 +86,25 @@ $spacers: (
 );
 
 // -----------------------------------------------------------------------------
-// Border & Radius
+// Border & Radius - มนกำลังดี
 // -----------------------------------------------------------------------------
 
 $border-width: 1px;
-$border-radius: 0.25rem;
-$border-radius-sm: 0.2rem;
-$border-radius-lg: 0.3rem;
-$border-radius-xl: 0.5rem;
+$border-radius: 0.5rem;          // 8px - มนพอดี
+$border-radius-sm: 0.375rem;     // 6px
+$border-radius-lg: 0.75rem;      // 12px
+$border-radius-xl: 1rem;         // 16px
 $border-radius-pill: 50rem;
 
 // -----------------------------------------------------------------------------
-// Shadows
+// Shadows - นุ่มนวล ทันสมัย
 // -----------------------------------------------------------------------------
 
-$box-shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-$box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-$box-shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+$box-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$box-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$box-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$box-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
 // -----------------------------------------------------------------------------
 // Transitions
@@ -183,10 +187,13 @@ $table-border-color: $border-color;
 // Custom Variables สำหรับ Stock Management
 // -----------------------------------------------------------------------------
 
-// Stock Status Colors
-$stock-in-color: #28a745;
-$stock-out-color: #dc3545;
-$stock-low-color: #ffc107;
+// Stock Status Colors - ชัดเจน เห็นได้ทันที
+$stock-in-color: #10B981;        // เขียว - มีสินค้า
+$stock-out-color: #EF4444;       // แดง - หมดสินค้า
+$stock-low-color: #F59E0B;       // เหลืองส้ม - เหลือน้อย
+$stock-in-bg: #D1FAE5;           // พื้นเขียวอ่อน
+$stock-out-bg: #FEE2E2;          // พื้นแดงอ่อน
+$stock-low-bg: #FEF3C7;          // พื้นเหลืองอ่อน
 
 // Sidebar
 $sidebar-width: 250px;
