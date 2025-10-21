@@ -1,0 +1,82 @@
+// =============================================================================
+// Button Component Styles
+// =============================================================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $btn-padding-y $btn-padding-x;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-base;
+  border-radius: $btn-border-radius;
+  border: $border-width solid transparent;
+  cursor: pointer;
+  transition: $transition-base;
+  text-align: center;
+  gap: 0.5rem;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  // Button sizes
+  &.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: $font-size-sm;
+  }
+
+  &.btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: $font-size-lg;
+  }
+
+  // Button variants
+  &.btn-primary {
+    background-color: $primary-color;
+    color: $text-white;
+
+    &:hover:not(:disabled) {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: $secondary-color;
+    color: $text-white;
+
+    &:hover:not(:disabled) {
+      background-color: darken($secondary-color, 10%);
+    }
+  }
+
+  &.btn-success {
+    background-color: $success-color;
+    color: $text-white;
+
+    &:hover:not(:disabled) {
+      background-color: darken($success-color, 10%);
+    }
+  }
+
+  &.btn-danger {
+    background-color: $danger-color;
+    color: $text-white;
+
+    &:hover:not(:disabled) {
+      background-color: darken($danger-color, 10%);
+    }
+  }
+
+  &.btn-outline-primary {
+    border-color: $primary-color;
+    color: $primary-color;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-color;
+      color: $text-white;
+    }
+  }
+}

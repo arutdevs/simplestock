@@ -1,0 +1,80 @@
+// =============================================================================
+// Typography Styles
+// =============================================================================
+
+// Headings
+h1, .h1 {
+  font-size: $h1-font-size;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  margin-bottom: 1rem;
+}
+
+h2, .h2 {
+  font-size: $h2-font-size;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-heading;
+  margin-bottom: 0.875rem;
+}
+
+h3, .h3 {
+  font-size: $h3-font-size;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-heading;
+  margin-bottom: 0.75rem;
+}
+
+h4, .h4 {
+  font-size: $h4-font-size;
+  font-weight: $font-weight-semibold;
+  line-height: $line-height-heading;
+  margin-bottom: 0.625rem;
+}
+
+h5, .h5 {
+  font-size: $h5-font-size;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-heading;
+  margin-bottom: 0.5rem;
+}
+
+h6, .h6 {
+  font-size: $h6-font-size;
+  font-weight: $font-weight-medium;
+  line-height: $line-height-heading;
+  margin-bottom: 0.5rem;
+}
+
+// Paragraphs
+p {
+  margin-bottom: 1rem;
+  line-height: $line-height-base;
+}
+
+// Links
+a {
+  color: $primary-color;
+  transition: $transition-base;
+
+  &:hover {
+    color: darken($primary-color, 10%);
+    text-decoration: underline;
+  }
+}
+
+// Text utilities
+.text-small {
+  font-size: $font-size-sm;
+}
+
+.text-large {
+  font-size: $font-size-lg;
+}
+
+.text-bold {
+  font-weight: $font-weight-bold;
+}
+
+.text-muted {
+  color: $text-muted;
+}

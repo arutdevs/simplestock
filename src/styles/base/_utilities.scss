@@ -1,0 +1,73 @@
+// =============================================================================
+// Utility Classes
+// =============================================================================
+
+// Display utilities
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-flex { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+
+// Flex utilities
+.flex-column { flex-direction: column !important; }
+.flex-row { flex-direction: row !important; }
+.justify-content-center { justify-content: center !important; }
+.justify-content-between { justify-content: space-between !important; }
+.align-items-center { align-items: center !important; }
+
+// Spacing utilities
+.mt-0 { margin-top: 0 !important; }
+.mt-1 { margin-top: map-get($spacers, 1) !important; }
+.mt-2 { margin-top: map-get($spacers, 2) !important; }
+.mt-3 { margin-top: map-get($spacers, 3) !important; }
+.mt-4 { margin-top: map-get($spacers, 4) !important; }
+.mt-5 { margin-top: map-get($spacers, 5) !important; }
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-1 { margin-bottom: map-get($spacers, 1) !important; }
+.mb-2 { margin-bottom: map-get($spacers, 2) !important; }
+.mb-3 { margin-bottom: map-get($spacers, 3) !important; }
+.mb-4 { margin-bottom: map-get($spacers, 4) !important; }
+.mb-5 { margin-bottom: map-get($spacers, 5) !important; }
+
+.p-0 { padding: 0 !important; }
+.p-1 { padding: map-get($spacers, 1) !important; }
+.p-2 { padding: map-get($spacers, 2) !important; }
+.p-3 { padding: map-get($spacers, 3) !important; }
+.p-4 { padding: map-get($spacers, 4) !important; }
+.p-5 { padding: map-get($spacers, 5) !important; }
+
+// Text alignment
+.text-center { text-align: center !important; }
+.text-left { text-align: left !important; }
+.text-right { text-align: right !important; }
+
+// Background colors
+.bg-white { background-color: $bg-primary !important; }
+.bg-light { background-color: $bg-secondary !important; }
+.bg-dark { background-color: $bg-dark !important; }
+
+// Text colors
+.text-primary { color: $primary-color !important; }
+.text-secondary { color: $secondary-color !important; }
+.text-success { color: $success-color !important; }
+.text-danger { color: $danger-color !important; }
+.text-warning { color: $warning-color !important; }
+.text-info { color: $info-color !important; }
+
+// Border utilities
+.border { border: $border-width solid $border-color !important; }
+.border-top { border-top: $border-width solid $border-color !important; }
+.border-bottom { border-bottom: $border-width solid $border-color !important; }
+.border-0 { border: 0 !important; }
+
+// Border radius
+.rounded { border-radius: $border-radius !important; }
+.rounded-sm { border-radius: $border-radius-sm !important; }
+.rounded-lg { border-radius: $border-radius-lg !important; }
+.rounded-circle { border-radius: 50% !important; }
+
+// Shadow utilities
+.shadow-sm { box-shadow: $box-shadow-sm !important; }
+.shadow { box-shadow: $box-shadow !important; }
+.shadow-lg { box-shadow: $box-shadow-lg !important; }

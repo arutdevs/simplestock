@@ -1,0 +1,136 @@
+// =============================================================================
+// Dashboard Page Styles
+// =============================================================================
+
+.dashboard-page {
+  .dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .stat-card {
+      background-color: $bg-primary;
+      border-radius: $border-radius-lg;
+      padding: 1.5rem;
+      box-shadow: $box-shadow-sm;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: $transition-base;
+
+      &:hover {
+        box-shadow: $box-shadow;
+      }
+
+      .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: $border-radius-lg;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+
+        &.primary {
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+        }
+
+        &.success {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+        }
+
+        &.danger {
+          background-color: rgba($danger-color, 0.1);
+          color: $danger-color;
+        }
+
+        &.warning {
+          background-color: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+      }
+
+      .stat-info {
+        flex: 1;
+
+        .stat-label {
+          font-size: $font-size-sm;
+          color: $text-muted;
+          margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+          font-size: $h3-font-size;
+          font-weight: $font-weight-bold;
+          color: $text-primary;
+        }
+      }
+    }
+  }
+
+  .dashboard-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .chart-card {
+      background-color: $bg-primary;
+      border-radius: $border-radius-lg;
+      padding: 1.5rem;
+      box-shadow: $box-shadow-sm;
+
+      .chart-title {
+        font-size: $h5-font-size;
+        font-weight: $font-weight-semibold;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .recent-activities {
+    background-color: $bg-primary;
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+    box-shadow: $box-shadow-sm;
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: $border-width solid $border-light;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $bg-secondary;
+      }
+
+      .activity-info {
+        flex: 1;
+
+        .activity-title {
+          font-weight: $font-weight-medium;
+          color: $text-primary;
+        }
+
+        .activity-time {
+          font-size: $font-size-sm;
+          color: $text-muted;
+        }
+      }
+    }
+  }
+}

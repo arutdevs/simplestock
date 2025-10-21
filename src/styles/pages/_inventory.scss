@@ -1,0 +1,91 @@
+// =============================================================================
+// Inventory Page Styles
+// =============================================================================
+
+.inventory-page {
+  .inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    .inventory-actions {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  .inventory-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    .summary-card {
+      background-color: $bg-primary;
+      border-radius: $border-radius;
+      padding: 1rem;
+      box-shadow: $box-shadow-sm;
+      text-align: center;
+
+      .summary-label {
+        font-size: $font-size-sm;
+        color: $text-muted;
+        margin-bottom: 0.5rem;
+      }
+
+      .summary-value {
+        font-size: $h4-font-size;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+      }
+    }
+  }
+
+  .inventory-table-wrapper {
+    background-color: $bg-primary;
+    border-radius: $border-radius-lg;
+    padding: 1.5rem;
+    box-shadow: $box-shadow-sm;
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      .search-box {
+        width: 300px;
+      }
+    }
+  }
+
+  .stock-badge {
+    &.low-stock {
+      background-color: rgba($warning-color, 0.1);
+      color: $warning-color;
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+    }
+
+    &.out-of-stock {
+      background-color: rgba($danger-color, 0.1);
+      color: $danger-color;
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+    }
+
+    &.in-stock {
+      background-color: rgba($success-color, 0.1);
+      color: $success-color;
+      padding: 0.25rem 0.5rem;
+      border-radius: $border-radius-sm;
+      font-size: $font-size-sm;
+      font-weight: $font-weight-medium;
+    }
+  }
+}

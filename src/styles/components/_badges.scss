@@ -1,0 +1,70 @@
+// =============================================================================
+// Badge Component Styles
+// =============================================================================
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  border-radius: $border-radius-sm;
+
+  &.badge-primary {
+    background-color: $primary-color;
+    color: $text-white;
+  }
+
+  &.badge-secondary {
+    background-color: $secondary-color;
+    color: $text-white;
+  }
+
+  &.badge-success {
+    background-color: $success-color;
+    color: $text-white;
+  }
+
+  &.badge-danger {
+    background-color: $danger-color;
+    color: $text-white;
+  }
+
+  &.badge-warning {
+    background-color: $warning-color;
+    color: $text-primary;
+  }
+
+  &.badge-info {
+    background-color: $info-color;
+    color: $text-white;
+  }
+
+  &.badge-light {
+    background-color: $light-color;
+    color: $text-primary;
+  }
+
+  &.badge-dark {
+    background-color: $dark-color;
+    color: $text-white;
+  }
+
+  // Badge สำหรับ Stock Status
+  &.badge-stock-in {
+    background-color: $stock-in-color;
+    color: $text-white;
+  }
+
+  &.badge-stock-out {
+    background-color: $stock-out-color;
+    color: $text-white;
+  }
+
+  &.badge-stock-low {
+    background-color: $stock-low-color;
+    color: $text-primary;
+  }
+}

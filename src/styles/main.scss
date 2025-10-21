@@ -1,0 +1,127 @@
+// =============================================================================
+// Main Styles - ไฟล์หลักสำหรับรวม styles ทั้งหมด
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// 1. Variables & Configuration
+// -----------------------------------------------------------------------------
+@import 'variables';
+
+// -----------------------------------------------------------------------------
+// 2. Third-party Libraries
+// -----------------------------------------------------------------------------
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+
+// -----------------------------------------------------------------------------
+// 3. Base Styles
+// -----------------------------------------------------------------------------
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/utilities';
+
+// -----------------------------------------------------------------------------
+// 4. Layout Components
+// -----------------------------------------------------------------------------
+@import 'layout/header';
+@import 'layout/sidebar';
+@import 'layout/footer';
+@import 'layout/container';
+
+// -----------------------------------------------------------------------------
+// 5. Common Components
+// -----------------------------------------------------------------------------
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/forms';
+@import 'components/tables';
+@import 'components/modals';
+@import 'components/alerts';
+@import 'components/badges';
+
+// -----------------------------------------------------------------------------
+// 6. Page-specific Styles
+// -----------------------------------------------------------------------------
+@import 'pages/products';
+@import 'pages/dashboard';
+@import 'pages/inventory';
+
+// -----------------------------------------------------------------------------
+// 7. Utilities & Helpers
+// -----------------------------------------------------------------------------
+@import 'helpers/mixins';
+@import 'helpers/animations';
+@import 'helpers/responsive';
+
+// -----------------------------------------------------------------------------
+// 8. Global Styles
+// -----------------------------------------------------------------------------
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: $font-size-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  color: $text-primary;
+  background-color: $bg-secondary;
+  min-height: 100vh;
+}
+
+// Scrollbar Styling
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $bg-secondary;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $border-color;
+  border-radius: $border-radius;
+
+  &:hover {
+    background: darken($border-color, 10%);
+  }
+}
+
+// Selection Styling
+::selection {
+  background-color: rgba($primary-color, 0.2);
+  color: $text-primary;
+}
+
+::-moz-selection {
+  background-color: rgba($primary-color, 0.2);
+  color: $text-primary;
+}
+
+// Focus Outline
+:focus-visible {
+  outline: 2px solid $primary-color;
+  outline-offset: 2px;
+}
+
+// Print Styles
+@media print {
+  body {
+    background-color: white;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
