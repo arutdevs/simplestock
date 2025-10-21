@@ -1,12 +1,12 @@
-<!-- product-list.component.html - ULTRA MODERN VERSION -->
+<!-- product-list.component.html - Simple Inventory Management -->
 <app-header></app-header>
 <div class="container-fluid mt-4 content-wrapper">
-  <!-- Stats Overview with Enhanced Design -->
+  <!-- Stats Overview - เหลือ 2 Cards -->
   <div class="row mb-4">
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-6 col-md-6 mb-4">
       <div class="stats-card">
         <div class="d-flex justify-content-between align-items-start">
-          <div style="position: relative; z-index: 2">
+          <div>
             <div class="stats-label">สินค้าทั้งหมด</div>
             <div class="stats-number">156</div>
             <div class="mt-2 stats-sub">
@@ -18,25 +18,10 @@
       </div>
     </div>
 
-    <div class="col-lg-3 col-md-6 mb-4">
+    <div class="col-lg-6 col-md-6 mb-4">
       <div class="stats-card">
         <div class="d-flex justify-content-between align-items-start">
-          <div style="position: relative; z-index: 2">
-            <div class="stats-label">สินค้าคงเหลือต่ำ</div>
-            <div class="stats-number">12</div>
-            <div class="mt-2 stats-sub">
-              <i class="fas fa-exclamation-triangle me-1"></i> ต้องเติมสต็อก
-            </div>
-          </div>
-          <i class="fas fa-exclamation-triangle stats-icon"></i>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="stats-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div style="position: relative; z-index: 2">
+          <div>
             <div class="stats-label">หมวดหมู่</div>
             <div class="stats-number">24</div>
             <div class="mt-2 stats-sub">
@@ -47,90 +32,72 @@
         </div>
       </div>
     </div>
-
-    <div class="col-lg-3 col-md-6 mb-4">
-      <div class="stats-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div style="position: relative; z-index: 2">
-            <div class="stats-label">มูลค่าคงคลัง</div>
-            <div class="stats-number">฿2.4M</div>
-            <div class="mt-2 stats-sub">
-              <i class="fas fa-chart-line me-1"></i> เติบโต +8%
-            </div>
-          </div>
-          <i class="fas fa-coins stats-icon"></i>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Enhanced Search and Filter Section -->
-  <div class="search-glass">
-    <div class="row g-3 align-items-end" style="position: relative; z-index: 2">
-      <div class="col-md-4">
-        <label class="form-label-glass">
-          <i class="fas fa-search me-2"></i>ค้นหาสินค้า
-        </label>
-        <div class="input-group">
-          <span class="input-group-text-glass">
-            <i class="fas fa-search"></i>
-          </span>
+  <!-- Search and Filter Section -->
+  <div class="search-section card mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label">
+            <i class="fas fa-search me-2"></i>ค้นหาสินค้า
+          </label>
           <input
             type="text"
-            class="form-control-glass"
+            class="form-control"
             placeholder="ชื่อสินค้า, SKU, รหัสสินค้า..."
           />
         </div>
+
+        <div class="col-md-3">
+          <label class="form-label">
+            <i class="fas fa-layer-group me-2"></i>หมวดหมู่
+          </label>
+          <select class="form-select">
+            <option selected>ทั้งหมด</option>
+            <option>อิเล็กทรอนิกส์</option>
+            <option>เสื้อผ้า</option>
+            <option>อาหารและเครื่องดื่ม</option>
+            <option>เครื่องใช้ในบ้าน</option>
+          </select>
+        </div>
+
+        <div class="col-md-2">
+          <label class="form-label">
+            <i class="fas fa-toggle-on me-2"></i>สถานะ
+          </label>
+          <select class="form-select">
+            <option selected>ทั้งหมด</option>
+            <option>เปิดใช้งาน</option>
+            <option>ปิดใช้งาน</option>
+            <option>สินค้าหมด</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <button class="btn btn-primary w-100">
+            <i class="fas fa-filter me-2"></i>กรองผลลัพธ์
+          </button>
+        </div>
       </div>
 
-      <div class="col-md-3">
-        <label class="form-label-glass">
-          <i class="fas fa-layer-group me-2"></i>หมวดหมู่
-        </label>
-        <select class="form-select-glass">
-          <option selected>ทั้งหมด</option>
-          <option>อิเล็กทรอนิกส์</option>
-          <option>เสื้อผ้า</option>
-          <option>อาหารและเครื่องดื่ม</option>
-          <option>เครื่องใช้ในบ้าน</option>
-        </select>
-      </div>
-
-      <div class="col-md-2">
-        <label class="form-label-glass">
-          <i class="fas fa-toggle-on me-2"></i>สถานะ
-        </label>
-        <select class="form-select-glass">
-          <option selected>ทั้งหมด</option>
-          <option>เปิดใช้งาน</option>
-          <option>ปิดใช้งาน</option>
-          <option>สินค้าหมด</option>
-        </select>
-      </div>
-
-      <div class="col-md-3">
-        <button class="btn btn-premium btn-premium-primary w-100">
-          <i class="fas fa-filter me-2"></i><span>กรองผลลัพธ์</span>
-        </button>
-      </div>
-    </div>
-
-    <div class="row mt-4" style="position: relative; z-index: 2">
-      <div class="col-12">
-        <button class="btn btn-premium btn-premium-success">
-          <i class="fas fa-plus-circle me-2"></i><span>เพิ่มสินค้าใหม่</span>
-        </button>
-        <button class="btn btn-premium btn-premium-outline ms-2">
-          <i class="fas fa-file-export me-2"></i><span>ส่งออก Excel</span>
-        </button>
-        <button class="btn btn-premium btn-premium-outline ms-2">
-          <i class="fas fa-print me-2"></i><span>พิมพ์รายงาน</span>
-        </button>
+      <div class="row mt-3">
+        <div class="col-12">
+          <button class="btn btn-success">
+            <i class="fas fa-plus-circle me-2"></i>เพิ่มสินค้าใหม่
+          </button>
+          <button class="btn btn-outline-primary ms-2">
+            <i class="fas fa-file-export me-2"></i>ส่งออก Excel
+          </button>
+          <button class="btn btn-outline-primary ms-2">
+            <i class="fas fa-print me-2"></i>พิมพ์รายงาน
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Enhanced Product Grid -->
+  <!-- Product Grid -->
   <div class="row">
     <!-- Product Card 1 -->
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -141,8 +108,7 @@
             class="product-image"
             alt="Laptop"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-active">
+          <span class="badge badge-stock-in badge-status">
             <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
           </span>
         </div>
@@ -159,22 +125,19 @@
 
           <h5 class="product-title">Laptop Dell Inspiron 15</h5>
           <p class="product-description">
-            <i class="fas fa-microchip me-1"></i>Intel Core i5 • 8GB RAM • 256GB
-            SSD
+            <i class="fas fa-microchip me-1"></i>Intel Core i5 • 8GB RAM • 256GB SSD
           </p>
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿25,900</span>
-            <span class="stock-indicator" style="color: rgba(52, 211, 153, 1)">
+            <span class="badge badge-stock-in">
               <i class="fas fa-box me-1"></i> 45
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -188,8 +151,7 @@
             class="product-image"
             alt="T-Shirt"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-active">
+          <span class="badge badge-stock-in badge-status">
             <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
           </span>
         </div>
@@ -211,16 +173,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿590</span>
-            <span class="stock-indicator" style="color: rgba(52, 211, 153, 1)">
+            <span class="badge badge-stock-in">
               <i class="fas fa-box me-1"></i> 120
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -234,8 +194,7 @@
             class="product-image"
             alt="Coffee"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-warning">
+          <span class="badge badge-stock-low badge-status">
             <i class="fas fa-exclamation-triangle me-1"></i>คงเหลือต่ำ
           </span>
         </div>
@@ -257,16 +216,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿450</span>
-            <span class="stock-indicator" style="color: rgba(251, 191, 36, 1)">
+            <span class="badge badge-stock-low">
               <i class="fas fa-box me-1"></i> 8
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -280,8 +237,7 @@
             class="product-image"
             alt="Chair"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-danger">
+          <span class="badge badge-stock-out badge-status">
             <i class="fas fa-times-circle me-1"></i>สินค้าหมด
           </span>
         </div>
@@ -303,16 +259,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿3,900</span>
-            <span class="stock-indicator" style="color: rgba(239, 68, 68, 1)">
+            <span class="badge badge-stock-out">
               <i class="fas fa-ban me-1"></i> 0
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -326,8 +280,7 @@
             class="product-image"
             alt="Mouse"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-active">
+          <span class="badge badge-stock-in badge-status">
             <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
           </span>
         </div>
@@ -349,16 +302,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿890</span>
-            <span class="stock-indicator" style="color: rgba(52, 211, 153, 1)">
+            <span class="badge badge-stock-in">
               <i class="fas fa-box me-1"></i> 67
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -372,8 +323,7 @@
             class="product-image"
             alt="Headphone"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-active">
+          <span class="badge badge-stock-in badge-status">
             <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
           </span>
         </div>
@@ -395,16 +345,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿2,490</span>
-            <span class="stock-indicator" style="color: rgba(52, 211, 153, 1)">
+            <span class="badge badge-stock-in">
               <i class="fas fa-box me-1"></i> 32
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -418,8 +366,7 @@
             class="product-image"
             alt="Watch"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-active">
+          <span class="badge badge-stock-in badge-status">
             <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
           </span>
         </div>
@@ -441,16 +388,14 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿4,590</span>
-            <span class="stock-indicator" style="color: rgba(52, 211, 153, 1)">
+            <span class="badge badge-stock-in">
               <i class="fas fa-box me-1"></i> 28
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
@@ -464,8 +409,7 @@
             class="product-image"
             alt="Backpack"
           />
-          <div class="product-overlay"></div>
-          <span class="badge-status badge-warning">
+          <span class="badge badge-stock-low badge-status">
             <i class="fas fa-exclamation-triangle me-1"></i>คงเหลือต่ำ
           </span>
         </div>
@@ -487,26 +431,24 @@
 
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="price-tag">฿1,290</span>
-            <span class="stock-indicator" style="color: rgba(251, 191, 36, 1)">
+            <span class="badge badge-stock-low">
               <i class="fas fa-box me-1"></i> 5
             </span>
           </div>
 
-          <div class="d-grid gap-2">
-            <button class="btn btn-edit">
-              <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
-            </button>
-          </div>
+          <button class="btn btn-outline-primary w-100">
+            <i class="fas fa-edit me-2"></i>แก้ไขสินค้า
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Enhanced Pagination -->
+  <!-- Pagination -->
   <div class="row mt-5 mb-5">
     <div class="col-12">
       <nav>
-        <ul class="pagination justify-content-center pagination-glass">
+        <ul class="pagination justify-content-center">
           <li class="page-item disabled">
             <a class="page-link">
               <i class="fas fa-chevron-left me-2"></i>ก่อนหน้า
