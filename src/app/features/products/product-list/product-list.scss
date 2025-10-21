@@ -66,6 +66,8 @@
   transition: $transition-base;
   box-shadow: $box-shadow-sm;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-4px);
@@ -105,6 +107,14 @@
 
 .product-body {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  // ให้ปุ่มอยู่ชิดขอบล่างเสมอ
+  .btn {
+    margin-top: auto;
+  }
 }
 
 .category-badge {
