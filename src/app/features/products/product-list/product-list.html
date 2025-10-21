@@ -1,98 +1,66 @@
 <!-- product-list.component.html - Simple Inventory Management -->
 <app-header></app-header>
-<div class="container-fluid mt-3 content-wrapper">
-  <!-- Stats Overview - เหลือ 2 Cards -->
-  <div class="row mb-3">
-    <div class="col-lg-6 col-md-6 mb-3">
-      <div class="stats-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stats-label">สินค้าทั้งหมด</div>
-            <div class="stats-number">156</div>
-            <div class="mt-2 stats-sub">
-              <i class="fas fa-arrow-up me-1"></i> +12% จากเดือนที่แล้ว
-            </div>
-          </div>
-          <i class="fas fa-boxes stats-icon"></i>
+<div class="container-fluid mt-2 content-wrapper">
+  <!-- Compact Toolbar: Stats + Search + Actions -->
+  <div class="toolbar-section mb-2">
+    <div class="row g-2 align-items-center">
+      <!-- Stats - Compact Inline -->
+      <div class="col-auto">
+        <div class="stats-inline">
+          <i class="fas fa-boxes text-primary"></i>
+          <span class="stats-value">156</span>
+          <span class="stats-text">สินค้า</span>
         </div>
       </div>
-    </div>
-
-    <div class="col-lg-6 col-md-6 mb-3">
-      <div class="stats-card">
-        <div class="d-flex justify-content-between align-items-start">
-          <div>
-            <div class="stats-label">หมวดหมู่</div>
-            <div class="stats-number">24</div>
-            <div class="mt-2 stats-sub">
-              <i class="fas fa-check-circle me-1"></i> ครบถ้วน
-            </div>
-          </div>
-          <i class="fas fa-layer-group stats-icon"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Search and Filter Section -->
-  <div class="search-section card mb-3">
-    <div class="card-body py-3">
-      <div class="row g-2 align-items-end">
-        <div class="col-md-4">
-          <label class="form-label">
-            <i class="fas fa-search me-2"></i>ค้นหาสินค้า
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="ชื่อสินค้า, SKU, รหัสสินค้า..."
-          />
-        </div>
-
-        <div class="col-md-3">
-          <label class="form-label">
-            <i class="fas fa-layer-group me-2"></i>หมวดหมู่
-          </label>
-          <select class="form-select">
-            <option selected>ทั้งหมด</option>
-            <option>อิเล็กทรอนิกส์</option>
-            <option>เสื้อผ้า</option>
-            <option>อาหารและเครื่องดื่ม</option>
-            <option>เครื่องใช้ในบ้าน</option>
-          </select>
-        </div>
-
-        <div class="col-md-2">
-          <label class="form-label">
-            <i class="fas fa-toggle-on me-2"></i>สถานะ
-          </label>
-          <select class="form-select">
-            <option selected>ทั้งหมด</option>
-            <option>เปิดใช้งาน</option>
-            <option>ปิดใช้งาน</option>
-            <option>สินค้าหมด</option>
-          </select>
-        </div>
-
-        <div class="col-md-3">
-          <button class="btn btn-primary w-100">
-            <i class="fas fa-filter me-2"></i>กรองผลลัพธ์
-          </button>
+      <div class="col-auto">
+        <div class="stats-inline">
+          <i class="fas fa-layer-group text-success"></i>
+          <span class="stats-value">24</span>
+          <span class="stats-text">หมวดหมู่</span>
         </div>
       </div>
 
-      <div class="row mt-2">
-        <div class="col-12">
-          <button class="btn btn-success btn-sm">
-            <i class="fas fa-plus-circle me-1"></i>เพิ่มสินค้าใหม่
-          </button>
-          <button class="btn btn-outline-primary btn-sm ms-2">
-            <i class="fas fa-file-export me-1"></i>ส่งออก Excel
-          </button>
-          <button class="btn btn-outline-primary btn-sm ms-2">
-            <i class="fas fa-print me-1"></i>พิมพ์รายงาน
-          </button>
-        </div>
+      <!-- Divider -->
+      <div class="col-auto d-none d-md-block">
+        <div class="toolbar-divider"></div>
+      </div>
+
+      <!-- Quick Search -->
+      <div class="col-md-3 col-sm-12">
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          placeholder="ค้นหาสินค้า, SKU..."
+        />
+      </div>
+
+      <!-- Category Filter -->
+      <div class="col-md-2 col-sm-6">
+        <select class="form-select form-select-sm">
+          <option selected>ทุกหมวดหมู่</option>
+          <option>อิเล็กทรอนิกส์</option>
+          <option>เสื้อผ้า</option>
+          <option>อาหารและเครื่องดื่ม</option>
+        </select>
+      </div>
+
+      <!-- Status Filter -->
+      <div class="col-md-2 col-sm-6">
+        <select class="form-select form-select-sm">
+          <option selected>ทุกสถานะ</option>
+          <option>เปิดใช้งาน</option>
+          <option>สินค้าหมด</option>
+        </select>
+      </div>
+
+      <!-- Actions -->
+      <div class="col-auto ms-auto">
+        <button class="btn btn-success btn-sm">
+          <i class="fas fa-plus me-1"></i>เพิ่มสินค้า
+        </button>
+        <button class="btn btn-outline-secondary btn-sm ms-1">
+          <i class="fas fa-filter"></i>
+        </button>
       </div>
     </div>
   </div>

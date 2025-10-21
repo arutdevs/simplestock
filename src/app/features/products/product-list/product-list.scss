@@ -14,64 +14,47 @@
   position: relative;
 }
 
-// Stats Cards
-.stats-card {
+// Compact Toolbar Section
+.toolbar-section {
   background: $bg-primary;
   border: 1px solid $border-color;
   border-radius: $border-radius-lg;
-  padding: 1.25rem;
-  transition: $transition-base;
+  padding: 0.75rem 1rem;
   box-shadow: $box-shadow-sm;
-  cursor: pointer;
+}
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: $box-shadow;
-    border-color: $primary-color;
+// Inline Stats
+.stats-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: color.adjust($primary-color, $alpha: -0.95);
+  border-radius: $border-radius;
+  border: 1px solid color.adjust($primary-color, $alpha: -0.85);
+
+  i {
+    font-size: 1.1rem;
   }
 
-  .stats-icon {
-    font-size: 2rem;
-    opacity: 0.15;
-    color: $primary-color;
-    transition: all 0.3s ease;
-  }
-
-  .stats-number {
-    font-size: 1.75rem;
+  .stats-value {
+    font-size: 1.25rem;
     font-weight: $font-weight-bold;
     color: $text-primary;
-    margin: 0.5rem 0;
   }
 
-  .stats-label {
-    font-size: 0.75rem;
-    font-weight: $font-weight-semibold;
+  .stats-text {
+    font-size: 0.8rem;
     color: $text-secondary;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .stats-sub {
-    font-size: 0.75rem;
-    color: $text-muted;
-
-    i {
-      color: $success-color;
-    }
-  }
-
-  &:hover .stats-icon {
-    opacity: 0.25;
-    transform: scale(1.05);
+    font-weight: $font-weight-medium;
   }
 }
 
-// Search Section
-.search-section {
-  background: $bg-primary;
-  border: 1px solid $border-color;
-  box-shadow: $box-shadow-sm;
+// Toolbar Divider
+.toolbar-divider {
+  width: 1px;
+  height: 30px;
+  background: $border-color;
 }
 
 // Product Cards
@@ -165,12 +148,25 @@
 
 // Responsive
 @media (max-width: 768px) {
-  .stats-card {
-    padding: 1rem;
+  .toolbar-section {
+    padding: 0.5rem 0.75rem;
   }
 
-  .stats-number {
-    font-size: 1.5rem;
+  .stats-inline {
+    padding: 0.35rem 0.5rem;
+    gap: 0.35rem;
+
+    i {
+      font-size: 1rem;
+    }
+
+    .stats-value {
+      font-size: 1.1rem;
+    }
+
+    .stats-text {
+      font-size: 0.75rem;
+    }
   }
 
   .price-tag {
@@ -183,8 +179,10 @@
 }
 
 @media (max-width: 576px) {
-  .stats-number {
-    font-size: 1.25rem;
+  .stats-inline {
+    .stats-text {
+      display: none; // ซ่อนข้อความ แสดงแค่ไอคอนกับตัวเลข
+    }
   }
 
   .product-title {
