@@ -55,7 +55,7 @@
 
       <!-- Actions -->
       <div class="col-auto ms-auto">
-        <button class="btn btn-success btn-sm">
+        <button class="btn btn-success btn-sm" (click)="openAddProductModal()">
           <i class="fas fa-plus me-1"></i>เพิ่มสินค้า
         </button>
         <button class="btn btn-outline-secondary btn-sm ms-1">
@@ -447,3 +447,9 @@
     </div>
   </div>
 </div>
+
+<!-- Product Form Modal -->
+<app-product-form-modal
+  (save)="onSaveProduct($event)"
+  (cancel)="onCancelProduct()"
+></app-product-form-modal>

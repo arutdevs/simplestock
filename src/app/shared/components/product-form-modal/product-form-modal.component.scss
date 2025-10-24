@@ -1,0 +1,262 @@
+// product-form-modal.component.scss
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+
+// Modal Customization
+.modal-content {
+  border: none;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+// Modal Header
+.modal-header {
+  background: linear-gradient(135deg, $primary-color 0%, color.adjust($primary-color, $lightness: -10%) 100%);
+  color: white;
+  border-top-left-radius: $border-radius-lg;
+  border-top-right-radius: $border-radius-lg;
+  padding: 1.5rem;
+  border-bottom: none;
+
+  .modal-title {
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+    margin-bottom: 0.25rem;
+
+    i {
+      opacity: 0.9;
+    }
+  }
+
+  .modal-subtitle {
+    font-size: 0.875rem;
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+// Modal Body
+.modal-body {
+  padding: 1.5rem;
+  background: $bg-secondary;
+}
+
+// Form Labels
+.form-label {
+  font-weight: $font-weight-semibold;
+  color: $text-primary;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+
+  i {
+    color: $primary-color;
+    opacity: 0.7;
+  }
+
+  &.required::after {
+    content: " *";
+    color: $danger-color;
+  }
+}
+
+// Form Controls
+.form-control,
+.form-select {
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9rem;
+  transition: $transition-base;
+
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.2rem color.adjust($primary-color, $alpha: -0.75);
+  }
+
+  &:disabled {
+    background: color.adjust($bg-secondary, $lightness: -3%);
+  }
+
+  &.is-invalid {
+    border-color: $danger-color;
+
+    &:focus {
+      box-shadow: 0 0 0 0.2rem color.adjust($danger-color, $alpha: -0.75);
+    }
+  }
+}
+
+// Textarea
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+// Invalid Feedback
+.invalid-feedback {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+// Form Check (Switch)
+.form-check-input {
+  cursor: pointer;
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 2rem;
+
+  &:checked {
+    background-color: $success-color;
+    border-color: $success-color;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem color.adjust($primary-color, $alpha: -0.75);
+  }
+}
+
+.form-check-label {
+  cursor: pointer;
+  font-weight: $font-weight-medium;
+  margin-left: 0.5rem;
+
+  i {
+    color: $success-color;
+  }
+}
+
+// Small Text
+small.text-muted {
+  font-size: 0.75rem;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+// Modal Footer
+.modal-footer {
+  padding: 1rem 1.5rem;
+  background: $bg-primary;
+  border-top: 1px solid $border-color;
+  border-bottom-left-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+  gap: 0.5rem;
+
+  .btn {
+    padding: 0.625rem 1.25rem;
+    font-weight: $font-weight-semibold;
+    font-size: 0.9rem;
+    border-radius: $border-radius;
+    transition: $transition-base;
+
+    i {
+      opacity: 0.8;
+    }
+
+    &:hover i {
+      opacity: 1;
+    }
+
+    &.btn-outline-secondary {
+      &:hover {
+        background: $secondary-color;
+        border-color: $secondary-color;
+        color: white;
+      }
+    }
+
+    &.btn-primary {
+      background: $primary-color;
+      border-color: $primary-color;
+
+      &:hover {
+        background: color.adjust($primary-color, $lightness: -10%);
+        border-color: color.adjust($primary-color, $lightness: -10%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px color.adjust($primary-color, $alpha: -0.6);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
+
+// Form Grid Spacing
+.row.g-3 {
+  margin-right: -0.75rem;
+  margin-left: -0.75rem;
+
+  > * {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+}
+
+// Input Group Icons
+.input-group-text {
+  background: $bg-secondary;
+  border-color: $border-color;
+  color: $text-secondary;
+
+  i {
+    color: $primary-color;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+
+  .modal-header {
+    padding: 1rem;
+
+    .modal-title {
+      font-size: 1.1rem;
+    }
+
+    .modal-subtitle {
+      font-size: 0.8rem;
+    }
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-footer {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}
+
+// Animation
+.modal.fade .modal-dialog {
+  transition: transform 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+  transform: none;
+}
+
+// Backdrop
+.modal-backdrop.show {
+  opacity: 0.7;
+}
