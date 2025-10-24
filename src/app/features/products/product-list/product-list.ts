@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../../../shared/components/product-form-modal/product-form-modal.component';
 import { ProductCreateDto } from '../../../shared/models';
@@ -10,15 +10,6 @@ import { ProductCreateDto } from '../../../shared/models';
   styleUrl: './product-list.scss',
 })
 export class ProductList {
-  @ViewChild(ProductFormModalComponent) productModal!: ProductFormModalComponent;
-
-  /**
-   * เปิด modal สำหรับเพิ่มสินค้าใหม่
-   */
-  openAddProductModal() {
-    this.productModal.openModal();
-  }
-
   /**
    * บันทึกสินค้าใหม่
    */
