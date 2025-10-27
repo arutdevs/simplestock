@@ -138,18 +138,8 @@ export class ProductFormModalComponent implements OnInit {
       // Emit ข้อมูลออกไป
       this.save.emit(productDto);
 
-      // ปิด modal
+      // ปิด modal (closeModal จะ reset form และรูปให้อัตโนมัติ)
       this.closeModal();
-
-      // Reset form และรูปภาพ
-      this.productForm.reset({
-        isActive: true,
-        price: 0,
-        cost: 0,
-        stock: 0,
-        minStock: 0
-      });
-      this.removeImage();
     } else {
       // Mark all fields as touched เพื่อแสดง validation errors
       Object.keys(this.productForm.controls).forEach(key => {
@@ -238,6 +228,24 @@ export class ProductFormModalComponent implements OnInit {
    * เปิด modal
    */
   openModal() {
+    // Reset form และรูปภาพทุกครั้งที่เปิด modal
+    this.productForm.reset({
+      isActive: true,
+      price: 0,
+      cost: 0,
+      stock: 0,
+      minStock: 0
+    });
+    this.removeImage();
+
+    // ถ้ามี product (Edit mode) ให้ patch form และแสดงรูป
+    if (this.product) {
+      this.isEditMode = true;
+      this.patchFormValue(this.product);
+    } else {
+      this.isEditMode = false;
+    }
+
     const modalElement = document.getElementById('productFormModal');
     if (modalElement) {
       this.modal = new bootstrap.Modal(modalElement);
@@ -252,5 +260,15 @@ export class ProductFormModalComponent implements OnInit {
     if (this.modal) {
       this.modal.hide();
     }
+
+    // Reset form และรูปภาพเมื่อปิด modal
+    this.productForm.reset({
+      isActive: true,
+      price: 0,
+      cost: 0,
+      stock: 0,
+      minStock: 0
+    });
+    this.removeImage();
   }
 }
