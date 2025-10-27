@@ -3,7 +3,7 @@
  * Modal สำหรับเพิ่ม/แก้ไขข้อมูลสินค้า
  */
 
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductCreateDto, Product } from '../../../../shared/models';
@@ -31,7 +31,10 @@ export class ProductFormModalComponent implements OnInit {
   selectedFile: File | null = null;
   selectedImageBase64: string | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.initForm();
@@ -203,6 +206,9 @@ export class ProductFormModalComponent implements OnInit {
           const base64String = e.target.result as string;
           this.selectedImageBase64 = base64String;
           this.imagePreview = base64String;
+
+          // บังคับให้ Angular update view ทันที
+          this.cdr.detectChanges();
         }
       };
       reader.readAsDataURL(file);
@@ -222,6 +228,9 @@ export class ProductFormModalComponent implements OnInit {
     if (fileInput) {
       fileInput.value = '';
     }
+
+    // บังคับให้ Angular update view ทันที
+    this.cdr.detectChanges();
   }
 
   /**
