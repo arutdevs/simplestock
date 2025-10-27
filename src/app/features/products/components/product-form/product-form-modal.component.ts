@@ -26,6 +26,11 @@ export class ProductFormModalComponent implements OnInit {
   isEditMode = false;
   private modal: any;
 
+  // Image handling
+  imagePreview: string | null = null;
+  selectedFile: File | null = null;
+  selectedImageBase64: string | null = null;
+
   constructor(private fb: FormBuilder) {}
 
   ngOnInit() {
@@ -76,6 +81,11 @@ export class ProductFormModalComponent implements OnInit {
       imageUrl: product.imageUrl || '',
       isActive: product.isActive
     });
+
+    // แสดง preview รูปภาพถ้ามี
+    if (product.imageUrl) {
+      this.imagePreview = product.imageUrl;
+    }
   }
 
   /**
@@ -121,7 +131,7 @@ export class ProductFormModalComponent implements OnInit {
         stock: parseInt(formValue.stock),
         minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
         barcode: formValue.barcode || undefined,
-        imageUrl: formValue.imageUrl || undefined,
+        imageUrl: this.selectedImageBase64 || undefined, // ใช้ base64 string จากไฟล์ที่เลือก
         isActive: formValue.isActive
       };
 
@@ -131,7 +141,7 @@ export class ProductFormModalComponent implements OnInit {
       // ปิด modal
       this.closeModal();
 
-      // Reset form
+      // Reset form และรูปภาพ
       this.productForm.reset({
         isActive: true,
         price: 0,
@@ -139,6 +149,7 @@ export class ProductFormModalComponent implements OnInit {
         stock: 0,
         minStock: 0
       });
+      this.removeImage();
     } else {
       // Mark all fields as touched เพื่อแสดง validation errors
       Object.keys(this.productForm.controls).forEach(key => {
@@ -159,6 +170,7 @@ export class ProductFormModalComponent implements OnInit {
         stock: 0,
         minStock: 0
       });
+      this.removeImage();
     }
   }
 
@@ -168,6 +180,58 @@ export class ProductFormModalComponent implements OnInit {
   onCancel() {
     this.cancel.emit();
     this.closeModal();
+  }
+
+  /**
+   * จัดการเมื่อเลือกไฟล์รูปภาพ
+   */
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // ตรวจสอบขนาดไฟล์ (ไม่เกิน 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('ขนาดไฟล์ใหญ่เกินไป! กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 5MB');
+        input.value = '';
+        return;
+      }
+
+      // ตรวจสอบประเภทไฟล์
+      if (!file.type.startsWith('image/')) {
+        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        input.value = '';
+        return;
+      }
+
+      this.selectedFile = file;
+
+      // แปลงเป็น base64 และแสดง preview
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        if (e.target?.result) {
+          const base64String = e.target.result as string;
+          this.selectedImageBase64 = base64String;
+          this.imagePreview = base64String;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  /**
+   * ลบรูปภาพที่เลือก
+   */
+  removeImage() {
+    this.selectedFile = null;
+    this.selectedImageBase64 = null;
+    this.imagePreview = null;
+
+    // Clear file input
+    const fileInput = document.getElementById('imageFile') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 
   /**
