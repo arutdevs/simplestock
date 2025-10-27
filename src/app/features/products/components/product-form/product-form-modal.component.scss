@@ -15,23 +15,17 @@
   color: white;
   border-top-left-radius: $border-radius-lg;
   border-top-right-radius: $border-radius-lg;
-  padding: 1.5rem;
+  padding: 1rem 1.25rem;
   border-bottom: none;
 
   .modal-title {
     font-size: 1.25rem;
     font-weight: $font-weight-bold;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0;
 
     i {
       opacity: 0.9;
     }
-  }
-
-  .modal-subtitle {
-    font-size: 0.875rem;
-    margin: 0;
-    opacity: 0.9;
   }
 
   .btn-close {
@@ -46,7 +40,7 @@
 
 // Modal Body
 .modal-body {
-  padding: 1.5rem;
+  padding: 1.25rem;
   background: $bg-secondary;
 }
 
@@ -143,7 +137,7 @@ small.text-muted {
 
 // Modal Footer
 .modal-footer {
-  padding: 1rem 1.5rem;
+  padding: 1rem 1.25rem;
   background: $bg-primary;
   border-top: 1px solid $border-color;
   border-bottom-left-radius: $border-radius-lg;
@@ -222,14 +216,10 @@ small.text-muted {
   }
 
   .modal-header {
-    padding: 1rem;
+    padding: 0.875rem 1rem;
 
     .modal-title {
       font-size: 1.1rem;
-    }
-
-    .modal-subtitle {
-      font-size: 0.8rem;
     }
   }
 
@@ -238,7 +228,7 @@ small.text-muted {
   }
 
   .modal-footer {
-    padding: 0.75rem 1rem;
+    padding: 0.875rem 1rem;
     flex-direction: column;
 
     .btn {
