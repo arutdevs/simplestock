@@ -27,7 +27,7 @@ export enum ProductUnit {
  */
 export interface Product {
   id: string;                    // ID สินค้า
-  sku: string;                   // รหัสสินค้า (Stock Keeping Unit)
+  sku: string;                   // รหัสสินค้า (Stock Keeping Unit - ต้องไม่ซ้ำ)
   name: string;                  // ชื่อสินค้า
   description?: string;          // รายละเอียดสินค้า
   category: string;              // หมวดหมู่สินค้า
@@ -36,8 +36,7 @@ export interface Product {
   stock: number;                 // จำนวนคงเหลือ
   minStock?: number;             // จำนวนขั้นต่ำ (สำหรับแจ้งเตือน)
   unit: string;                  // หน่วยนับ (ชิ้น, กล่อง, etc.)
-  imageUrl?: string;             // URL รูปภาพสินค้า
-  barcode?: string;              // บาร์โค้ด
+  imageUrl?: string;             // รูปภาพสินค้า (base64 หรือ URL)
   isActive: boolean;             // สถานะการใช้งาน
   createdAt: Date;               // วันที่สร้าง
   updatedAt: Date;               // วันที่แก้ไขล่าสุด
@@ -58,7 +57,6 @@ export interface ProductCreateDto {
   minStock?: number;
   unit: string;
   imageUrl?: string;
-  barcode?: string;
   isActive?: boolean;  // default = true
 }
 
@@ -78,7 +76,6 @@ export interface ProductUpdateDto {
   minStock?: number;
   unit?: string;
   imageUrl?: string;
-  barcode?: string;
   isActive?: boolean;
 }
 
@@ -99,7 +96,7 @@ export interface ProductListResponse {
  * ใช้สำหรับกรองและค้นหาสินค้า
  */
 export interface ProductFilter {
-  search?: string;           // ค้นหาจาก ชื่อ, SKU, บาร์โค้ด
+  search?: string;           // ค้นหาจาก ชื่อ, SKU
   category?: string;         // กรองตามหมวดหมู่
   stockStatus?: StockStatus; // กรองตามสถานะสต็อก
   minPrice?: number;         // ราคาขั้นต่ำ

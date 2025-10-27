@@ -29,3 +29,13 @@ export type {
   CategoryCreateDto,
   CategoryUpdateDto
 } from './category.model';
+
+// Mock Data
+export {
+  MOCK_PRODUCTS,
+  MOCK_CATEGORIES,
+  getProductsByCategory,
+  getProductsByStockStatus,
+  calculateTotalStockValue,
+  getStatsSummary
+} from './product.mock';
