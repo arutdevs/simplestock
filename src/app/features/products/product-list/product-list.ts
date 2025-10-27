@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Header } from '../../../shared/layout/header/header';
-import { ProductFormModalComponent } from './product-form-modal.component';
+import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
 import { ProductCreateDto } from '../../../shared/models';
 
 @Component({

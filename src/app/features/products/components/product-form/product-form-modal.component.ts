@@ -6,7 +6,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductCreateDto, Product } from '../../../shared/models';
+import { ProductCreateDto, Product } from '../../../../shared/models';
 
 declare var bootstrap: any;
 
