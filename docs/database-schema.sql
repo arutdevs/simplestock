@@ -26,7 +26,7 @@ CREATE INDEX idx_categories_is_active ON categories(is_active);
 -- สินค้าทั้งหมดในระบบ
 CREATE TABLE products (
     id VARCHAR(36) PRIMARY KEY,
-    sku VARCHAR(50) UNIQUE NOT NULL,
+    sku VARCHAR(50) UNIQUE NOT NULL,  -- รหัสอ้างอิงสินค้า (ต้องไม่ซ้ำ)
     name VARCHAR(255) NOT NULL,
     description TEXT,
     category_id VARCHAR(36) NOT NULL,
@@ -36,7 +36,6 @@ CREATE TABLE products (
     min_stock INT DEFAULT 0,
     unit VARCHAR(50) NOT NULL,
     image_url TEXT,        -- รูปภาพ (base64 string หรือ URL)
-    barcode VARCHAR(100),
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -52,7 +51,6 @@ CREATE TABLE products (
 -- Indexes สำหรับเร่งความเร็ว
 CREATE INDEX idx_products_sku ON products(sku);
 CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_products_barcode ON products(barcode);
 CREATE INDEX idx_products_is_active ON products(is_active);
 
 -- ============================================

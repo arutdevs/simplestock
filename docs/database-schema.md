@@ -28,7 +28,6 @@ erDiagram
         int minStock
         string unit
         string imageUrl
-        string barcode
         boolean isActive
         datetime createdAt
         datetime updatedAt
@@ -58,7 +57,7 @@ erDiagram
 
 **ฟิลด์สำคัญ:**
 - `id` - รหัสสินค้า (Primary Key)
-- `sku` - รหัสอ้างอิง Stock Keeping Unit (ต้องไม่ซ้ำ)
+- `sku` - รหัสอ้างอิง Stock Keeping Unit (Unique Key - ต้องไม่ซ้ำ)
 - `name` - ชื่อสินค้า
 - `description` - รายละเอียดสินค้า
 - `categoryId` - รหัสหมวดหมู่ (Foreign Key → CATEGORIES)
@@ -68,7 +67,6 @@ erDiagram
 - `minStock` - จำนวนขั้นต่ำสำหรับแจ้งเตือน
 - `unit` - หน่วยนับ เช่น "ชิ้น", "กล่อง", "กิโลกรัม"
 - `imageUrl` - รูปภาพสินค้า (base64 หรือ URL)
-- `barcode` - บาร์โค้ด
 - `isActive` - สถานะเปิด/ปิดใช้งาน
 - `createdAt` - วันที่สร้าง
 - `updatedAt` - วันที่แก้ไขล่าสุด
@@ -90,7 +88,6 @@ CREATE INDEX idx_categories_is_active ON categories(is_active);
 -- Products
 CREATE INDEX idx_products_sku ON products(sku);
 CREATE INDEX idx_products_category ON products(category_id);
-CREATE INDEX idx_products_barcode ON products(barcode);
 CREATE INDEX idx_products_is_active ON products(is_active);
 ```
 
