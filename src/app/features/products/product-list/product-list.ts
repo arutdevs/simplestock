@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
 import { Product, ProductCreateDto, MOCK_PRODUCTS } from '../../../shared/models';
 
 @Component({
   selector: 'app-product-list',
-  imports: [Header, ProductFormModalComponent],
+  imports: [CommonModule, Header, ProductFormModalComponent],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })

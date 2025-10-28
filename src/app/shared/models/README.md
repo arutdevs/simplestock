@@ -32,7 +32,6 @@ interface Product {
   minStock?: number;        // จำนวนขั้นต่ำ
   unit: string;             // หน่วยนับ
   imageUrl?: string;        // รูปภาพ
-  barcode?: string;         // บาร์โค้ด
   isActive: boolean;        // สถานะใช้งาน
   createdAt: Date;          // วันที่สร้าง
   updatedAt: Date;          // วันที่แก้ไข
@@ -159,7 +158,7 @@ const value = calculateStockValue(product); // stock * price
 import { ProductFilter } from '@shared/models';
 
 const filter: ProductFilter = {
-  search: 'โน้ตบุ๊ค',           // ค้นหาจากชื่อ, SKU, บาร์โค้ด
+  search: 'โน้ตบุ๊ค',           // ค้นหาจากชื่อ, SKU
   category: 'อิเล็กทรอนิกส์',  // กรองตามหมวดหมู่
   stockStatus: StockStatus.LOW_STOCK, // เฉพาะสินค้าใกล้หมด
   minPrice: 1000,               // ราคาขั้นต่ำ

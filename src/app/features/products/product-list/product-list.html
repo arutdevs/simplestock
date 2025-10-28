@@ -65,42 +65,77 @@
     </div>
   </div>
 
-  <!-- Product Grid -->
+  <!-- Product Grid - ใช้ *ngFor กับ products array -->
   <div class="row">
-    <!-- Product Card 1 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" *ngFor="let product of products">
       <div class="product-card">
+        <!-- Product Image -->
         <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-laptop"></i>
+          <div class="product-image-placeholder" *ngIf="!product.imageUrl">
+            <i class="fas fa-box"></i>
           </div>
-          <span class="badge badge-stock-in badge-status">
-            <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
+          <img *ngIf="product.imageUrl" [src]="product.imageUrl" class="product-image" [alt]="product.name" />
+
+          <!-- Status Badge -->
+          <span class="badge badge-status"
+                [ngClass]="{
+                  'badge-stock-in': product.stock > (product.minStock || 0),
+                  'badge-stock-low': product.stock > 0 && product.stock <= (product.minStock || 0),
+                  'badge-stock-out': product.stock === 0
+                }">
+            <i class="fas"
+               [ngClass]="{
+                 'fa-check-circle': product.stock > (product.minStock || 0),
+                 'fa-exclamation-triangle': product.stock > 0 && product.stock <= (product.minStock || 0),
+                 'fa-times-circle': product.stock === 0
+               }"
+               class="me-1"></i>
+            <span *ngIf="product.stock > (product.minStock || 0)">เปิดใช้งาน</span>
+            <span *ngIf="product.stock > 0 && product.stock <= (product.minStock || 0)">คงเหลือต่ำ</span>
+            <span *ngIf="product.stock === 0">สินค้าหมด</span>
           </span>
         </div>
 
         <div class="product-body">
+          <!-- Category & SKU -->
           <div class="mb-2">
             <span class="category-badge">
-              <i class="fas fa-laptop me-1"></i>อิเล็กทรอนิกส์
+              <i class="fas fa-layer-group me-1"></i>{{ product.category }}
             </span>
             <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>LAP-001
+              <i class="fas fa-hashtag me-1"></i>{{ product.sku }}
             </small>
           </div>
 
-          <h5 class="product-title">Laptop Dell Inspiron 15</h5>
-          <p class="product-description">
-            <i class="fas fa-microchip me-1"></i>Intel Core i5 • 8GB RAM • 256GB SSD
+          <!-- Product Name -->
+          <h5 class="product-title">{{ product.name }}</h5>
+
+          <!-- Description -->
+          <p class="product-description" *ngIf="product.description">
+            {{ product.description }}
           </p>
 
+          <!-- Price & Stock -->
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿25,900</span>
-            <span class="badge badge-stock-in">
-              <i class="fas fa-box me-1"></i> 45
+            <span class="price-tag">฿{{ product.price.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
+            <span class="badge"
+                  [ngClass]="{
+                    'badge-stock-in': product.stock > (product.minStock || 0),
+                    'badge-stock-low': product.stock > 0 && product.stock <= (product.minStock || 0),
+                    'badge-stock-out': product.stock === 0
+                  }">
+              <i class="fas"
+                 [ngClass]="{
+                   'fa-box': product.stock > (product.minStock || 0),
+                   'fa-box': product.stock > 0 && product.stock <= (product.minStock || 0),
+                   'fa-ban': product.stock === 0
+                 }"
+                 class="me-1"></i>
+              {{ product.stock }}
             </span>
           </div>
 
+          <!-- Edit Button -->
           <button class="btn btn-outline-primary btn-sm w-100">
             <i class="fas fa-edit me-1"></i>แก้ไข
           </button>
@@ -108,291 +143,11 @@
       </div>
     </div>
 
-    <!-- Product Card 2 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-tshirt"></i>
-          </div>
-          <span class="badge badge-stock-in badge-status">
-            <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-tshirt me-1"></i>เสื้อผ้า
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>TSH-002
-            </small>
-          </div>
-
-          <h5 class="product-title">เสื้อยืดคอกลม Premium</h5>
-          <p class="product-description">
-            <i class="fas fa-leaf me-1"></i>ผ้าคอตตอน 100% • นุ่มใส่สบาย
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿590</span>
-            <span class="badge badge-stock-in">
-              <i class="fas fa-box me-1"></i> 120
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 3 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-coffee"></i>
-          </div>
-          <span class="badge badge-stock-low badge-status">
-            <i class="fas fa-exclamation-triangle me-1"></i>คงเหลือต่ำ
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-coffee me-1"></i>อาหารและเครื่องดื่ม
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>COF-003
-            </small>
-          </div>
-
-          <h5 class="product-title">เมล็ดกาแฟคั่วอาราบิก้า</h5>
-          <p class="product-description">
-            <i class="fas fa-star me-1"></i>100% Arabica • โน้ตรสช็อคโกแลต
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿450</span>
-            <span class="badge badge-stock-low">
-              <i class="fas fa-box me-1"></i> 8
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 4 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-chair"></i>
-          </div>
-          <span class="badge badge-stock-out badge-status">
-            <i class="fas fa-times-circle me-1"></i>สินค้าหมด
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-home me-1"></i>เครื่องใช้ในบ้าน
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>CHR-004
-            </small>
-          </div>
-
-          <h5 class="product-title">เก้าอี้ทำงาน Ergonomic</h5>
-          <p class="product-description">
-            <i class="fas fa-chair me-1"></i>รองรับหลัง • ปรับระดับได้
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿3,900</span>
-            <span class="badge badge-stock-out">
-              <i class="fas fa-ban me-1"></i> 0
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 5 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-mouse"></i>
-          </div>
-          <span class="badge badge-stock-in badge-status">
-            <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-laptop me-1"></i>อิเล็กทรอนิกส์
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>MOU-005
-            </small>
-          </div>
-
-          <h5 class="product-title">เมาส์ไร้สาย Bluetooth</h5>
-          <p class="product-description">
-            <i class="fas fa-mouse me-1"></i>DPI ปรับได้ 3 ระดับ
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿890</span>
-            <span class="badge badge-stock-in">
-              <i class="fas fa-box me-1"></i> 67
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 6 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-headphones"></i>
-          </div>
-          <span class="badge badge-stock-in badge-status">
-            <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-laptop me-1"></i>อิเล็กทรอนิกส์
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>HDP-006
-            </small>
-          </div>
-
-          <h5 class="product-title">หูฟังบลูทูธ Noise Cancel</h5>
-          <p class="product-description">
-            <i class="fas fa-headphones me-1"></i>ใช้งาน 30 ชม. • ตัดเสียงรบกวน
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿2,490</span>
-            <span class="badge badge-stock-in">
-              <i class="fas fa-box me-1"></i> 32
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 7 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-clock"></i>
-          </div>
-          <span class="badge badge-stock-in badge-status">
-            <i class="fas fa-check-circle me-1"></i>เปิดใช้งาน
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-laptop me-1"></i>อิเล็กทรอนิกส์
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>WCH-007
-            </small>
-          </div>
-
-          <h5 class="product-title">Smart Watch Sport Edition</h5>
-          <p class="product-description">
-            <i class="fas fa-heartbeat me-1"></i>วัดหัวใจ • GPS • กันน้ำ
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿4,590</span>
-            <span class="badge badge-stock-in">
-              <i class="fas fa-box me-1"></i> 28
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Product Card 8 -->
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
-      <div class="product-card">
-        <div class="product-image-wrapper">
-          <div class="product-image-placeholder">
-            <i class="fas fa-backpack"></i>
-          </div>
-          <span class="badge badge-stock-low badge-status">
-            <i class="fas fa-exclamation-triangle me-1"></i>คงเหลือต่ำ
-          </span>
-        </div>
-
-        <div class="product-body">
-          <div class="mb-2">
-            <span class="category-badge">
-              <i class="fas fa-tshirt me-1"></i>เสื้อผ้า
-            </span>
-            <small class="product-sku ms-2">
-              <i class="fas fa-barcode me-1"></i>BAG-008
-            </small>
-          </div>
-
-          <h5 class="product-title">กระเป๋าเป้ Minimalist</h5>
-          <p class="product-description">
-            <i class="fas fa-backpack me-1"></i>ช่องใส่ Laptop 15" • กันน้ำ
-          </p>
-
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿1,290</span>
-            <span class="badge badge-stock-low">
-              <i class="fas fa-box me-1"></i> 5
-            </span>
-          </div>
-
-          <button class="btn btn-outline-primary btn-sm w-100">
-            <i class="fas fa-edit me-1"></i>แก้ไข
-          </button>
-        </div>
-      </div>
+    <!-- Empty State -->
+    <div class="col-12 text-center py-5" *ngIf="products.length === 0">
+      <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">ยังไม่มีสินค้า</h5>
+      <p class="text-muted">คลิกปุ่ม "เพิ่มสินค้า" เพื่อเริ่มต้น</p>
     </div>
   </div>
 

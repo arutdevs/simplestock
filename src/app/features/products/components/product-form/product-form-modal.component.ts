@@ -60,7 +60,6 @@ export class ProductFormModalComponent implements OnInit {
       cost: [0],
       stock: [0, [Validators.required, Validators.min(0)]],
       minStock: [0],
-      barcode: [''],
       imageUrl: [''],
       isActive: [true]
     });
@@ -80,7 +79,6 @@ export class ProductFormModalComponent implements OnInit {
       cost: product.cost || 0,
       stock: product.stock,
       minStock: product.minStock || 0,
-      barcode: product.barcode || '',
       imageUrl: product.imageUrl || '',
       isActive: product.isActive
     });
@@ -133,7 +131,6 @@ export class ProductFormModalComponent implements OnInit {
         cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
         stock: parseInt(formValue.stock),
         minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
-        barcode: formValue.barcode || undefined,
         imageUrl: this.selectedImageBase64 || undefined, // ใช้ base64 string จากไฟล์ที่เลือก
         isActive: formValue.isActive
       };
