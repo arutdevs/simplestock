@@ -124,13 +124,12 @@
                     'badge-stock-low': product.stock > 0 && product.stock <= (product.minStock || 0),
                     'badge-stock-out': product.stock === 0
                   }">
-              <i class="fas"
+              <i class="fas me-1"
                  [ngClass]="{
                    'fa-box': product.stock > (product.minStock || 0),
-                   'fa-box': product.stock > 0 && product.stock <= (product.minStock || 0),
+                   'fa-exclamation-triangle': product.stock > 0 && product.stock <= (product.minStock || 0),
                    'fa-ban': product.stock === 0
-                 }"
-                 class="me-1"></i>
+                 }"></i>
               {{ product.stock }}
             </span>
           </div>
