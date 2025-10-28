@@ -1,129 +1,294 @@
 /**
  * Product Service
- * ตัวอย่าง Service สำหรับจัดการ API ของสินค้า
+ * จัดการ CRUD operations สำหรับสินค้า
+ * ตอนนี้ใช้ MOCK_PRODUCTS แทน API (เมื่อมี Backend ให้เปลี่ยนเป็น HttpClient)
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import {
   Product,
   ProductCreateDto,
   ProductUpdateDto,
   ProductListResponse,
-  ProductFilter
+  ProductFilter,
+  StockStatus,
+  MOCK_PRODUCTS,
+  getStockStatus
 } from '../../shared/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private readonly endpoint = '/products'; // จะถูกรวมกับ base URL จาก interceptor
+  // In-memory data store (จำลอง Database)
+  private products: Product[] = [...MOCK_PRODUCTS];
+  private nextId = 5; // เริ่มจาก prod-005 เพราะมี 4 รายการอยู่แล้ว
 
-  constructor(private http: HttpClient) {}
+  constructor() {
+    console.log('ProductService initialized with', this.products.length, 'products');
+  }
 
   /**
    * ดึงสินค้าทั้งหมด (รองรับ pagination และ filter)
    */
   getAll(filter?: ProductFilter): Observable<ProductListResponse> {
-    let params = new HttpParams();
+    let filteredProducts = [...this.products];
 
+    // Apply filters
     if (filter) {
-      if (filter.search) params = params.set('search', filter.search);
-      if (filter.category) params = params.set('category', filter.category);
-      if (filter.stockStatus) params = params.set('stockStatus', filter.stockStatus);
-      if (filter.minPrice) params = params.set('minPrice', filter.minPrice.toString());
-      if (filter.maxPrice) params = params.set('maxPrice', filter.maxPrice.toString());
-      if (filter.isActive !== undefined) params = params.set('isActive', filter.isActive.toString());
-      if (filter.page) params = params.set('page', filter.page.toString());
-      if (filter.pageSize) params = params.set('pageSize', filter.pageSize.toString());
-      if (filter.sortBy) params = params.set('sortBy', filter.sortBy);
-      if (filter.sortOrder) params = params.set('sortOrder', filter.sortOrder);
+      // Search by name or SKU
+      if (filter.search) {
+        const searchLower = filter.search.toLowerCase();
+        filteredProducts = filteredProducts.filter(p =>
+          p.name.toLowerCase().includes(searchLower) ||
+          p.sku.toLowerCase().includes(searchLower)
+        );
+      }
+
+      // Filter by category
+      if (filter.category) {
+        filteredProducts = filteredProducts.filter(p => p.category === filter.category);
+      }
+
+      // Filter by stock status
+      if (filter.stockStatus) {
+        filteredProducts = filteredProducts.filter(p => {
+          const status = getStockStatus(p);
+          return status === filter.stockStatus;
+        });
+      }
+
+      // Filter by price range
+      if (filter.minPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(p => p.price >= filter.minPrice!);
+      }
+      if (filter.maxPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(p => p.price <= filter.maxPrice!);
+      }
+
+      // Filter by active status
+      if (filter.isActive !== undefined) {
+        filteredProducts = filteredProducts.filter(p => p.isActive === filter.isActive);
+      }
+
+      // Sort
+      if (filter.sortBy) {
+        const sortField = filter.sortBy as keyof Product;
+        const sortOrder = filter.sortOrder === 'desc' ? -1 : 1;
+        filteredProducts.sort((a, b) => {
+          const aVal = a[sortField];
+          const bVal = b[sortField];
+
+          // Handle undefined values
+          if (aVal === undefined && bVal === undefined) return 0;
+          if (aVal === undefined) return 1;
+          if (bVal === undefined) return -1;
+
+          if (aVal < bVal) return -1 * sortOrder;
+          if (aVal > bVal) return 1 * sortOrder;
+          return 0;
+        });
+      }
     }
 
-    return this.http.get<ProductListResponse>(this.endpoint, { params });
+    // Pagination
+    const page = filter?.page || 1;
+    const pageSize = filter?.pageSize || 20;
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+    const response: ProductListResponse = {
+      products: paginatedProducts,
+      total: filteredProducts.length,
+      page: page,
+      pageSize: pageSize,
+      totalPages: Math.ceil(filteredProducts.length / pageSize)
+    };
+
+    // จำลอง API delay 300ms
+    return of(response).pipe(delay(300));
   }
 
   /**
    * ดึงสินค้าตาม ID
    */
   getById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${this.endpoint}/${id}`);
+    const product = this.products.find(p => p.id === id);
+
+    if (!product) {
+      return throwError(() => new Error(`ไม่พบสินค้า ID: ${id}`));
+    }
+
+    return of({ ...product }).pipe(delay(200));
   }
 
   /**
    * สร้างสินค้าใหม่
    */
-  create(product: ProductCreateDto): Observable<Product> {
-    return this.http.post<Product>(this.endpoint, product);
+  create(productDto: ProductCreateDto): Observable<Product> {
+    const newProduct: Product = {
+      id: `prod-${String(this.nextId++).padStart(3, '0')}`,
+      sku: productDto.sku,
+      name: productDto.name,
+      description: productDto.description,
+      category: productDto.category,
+      price: productDto.price,
+      cost: productDto.cost,
+      stock: productDto.stock,
+      minStock: productDto.minStock,
+      unit: productDto.unit,
+      imageUrl: productDto.imageUrl,
+      isActive: productDto.isActive ?? true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    this.products.unshift(newProduct); // เพิ่มไว้ด้านบน
+    console.log('Created product:', newProduct.id, newProduct.name);
+
+    return of({ ...newProduct }).pipe(delay(300));
   }
 
   /**
    * อัปเดตสินค้า
    */
-  update(product: ProductUpdateDto): Observable<Product> {
-    return this.http.put<Product>(`${this.endpoint}/${product.id}`, product);
+  update(productDto: ProductUpdateDto): Observable<Product> {
+    const index = this.products.findIndex(p => p.id === productDto.id);
+
+    if (index === -1) {
+      return throwError(() => new Error(`ไม่พบสินค้า ID: ${productDto.id}`));
+    }
+
+    const updatedProduct: Product = {
+      ...this.products[index],
+      ...productDto,
+      updatedAt: new Date()
+    };
+
+    this.products[index] = updatedProduct;
+    console.log('Updated product:', updatedProduct.id, updatedProduct.name);
+
+    return of({ ...updatedProduct }).pipe(delay(300));
   }
 
   /**
    * อัปเดตบางส่วนของสินค้า (Partial Update)
    */
   patch(id: string, updates: Partial<Product>): Observable<Product> {
-    return this.http.patch<Product>(`${this.endpoint}/${id}`, updates);
+    const index = this.products.findIndex(p => p.id === id);
+
+    if (index === -1) {
+      return throwError(() => new Error(`ไม่พบสินค้า ID: ${id}`));
+    }
+
+    const patchedProduct: Product = {
+      ...this.products[index],
+      ...updates,
+      updatedAt: new Date()
+    };
+
+    this.products[index] = patchedProduct;
+    console.log('Patched product:', patchedProduct.id);
+
+    return of({ ...patchedProduct }).pipe(delay(200));
   }
 
   /**
-   * ลบสินค้า
+   * ลบสินค้า (Soft delete - เปลี่ยน isActive = false)
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.endpoint}/${id}`);
+    const index = this.products.findIndex(p => p.id === id);
+
+    if (index === -1) {
+      return throwError(() => new Error(`ไม่พบสินค้า ID: ${id}`));
+    }
+
+    // Soft delete
+    this.products[index].isActive = false;
+    this.products[index].updatedAt = new Date();
+
+    console.log('Deleted (soft) product:', id);
+
+    return of(void 0).pipe(delay(200));
+  }
+
+  /**
+   * ลบสินค้าถาวร (Hard delete)
+   */
+  hardDelete(id: string): Observable<void> {
+    const index = this.products.findIndex(p => p.id === id);
+
+    if (index === -1) {
+      return throwError(() => new Error(`ไม่พบสินค้า ID: ${id}`));
+    }
+
+    this.products.splice(index, 1);
+    console.log('Deleted (hard) product:', id);
+
+    return of(void 0).pipe(delay(200));
   }
 
   /**
    * อัปเดตสต็อกสินค้า
    */
   updateStock(id: string, quantity: number): Observable<Product> {
-    return this.http.patch<Product>(`${this.endpoint}/${id}/stock`, { stock: quantity });
+    return this.patch(id, { stock: quantity });
   }
 
   /**
    * ดึงสินค้าตามหมวดหมู่
    */
   getByCategory(category: string): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.endpoint}/category/${category}`);
+    const products = this.products.filter(p => p.category === category && p.isActive);
+    return of([...products]).pipe(delay(200));
   }
 
   /**
    * ค้นหาสินค้า
    */
   search(query: string): Observable<Product[]> {
-    const params = new HttpParams().set('q', query);
-    return this.http.get<Product[]>(`${this.endpoint}/search`, { params });
-  }
-
-  /**
-   * Export สินค้าเป็น CSV
-   */
-  exportCsv(filter?: ProductFilter): Observable<Blob> {
-    let params = new HttpParams();
-    if (filter) {
-      // เพิ่ม filter params
-    }
-    return this.http.get(`${this.endpoint}/export/csv`, {
-      params,
-      responseType: 'blob'
-    });
-  }
-
-  /**
-   * Import สินค้าจากไฟล์
-   */
-  import(file: File): Observable<{ success: number; failed: number; errors: string[] }> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return this.http.post<{ success: number; failed: number; errors: string[] }>(
-      `${this.endpoint}/import`,
-      formData
+    const searchLower = query.toLowerCase();
+    const results = this.products.filter(p =>
+      (p.name.toLowerCase().includes(searchLower) ||
+       p.sku.toLowerCase().includes(searchLower) ||
+       p.description?.toLowerCase().includes(searchLower)) &&
+      p.isActive
     );
+
+    return of([...results]).pipe(delay(200));
+  }
+
+  /**
+   * นับสินค้าตาม Stock Status
+   */
+  getStockStats(): Observable<{ inStock: number; lowStock: number; outOfStock: number }> {
+    const stats = {
+      inStock: 0,
+      lowStock: 0,
+      outOfStock: 0
+    };
+
+    this.products.forEach(p => {
+      if (!p.isActive) return;
+
+      const status = getStockStatus(p);
+      if (status === StockStatus.IN_STOCK) stats.inStock++;
+      else if (status === StockStatus.LOW_STOCK) stats.lowStock++;
+      else if (status === StockStatus.OUT_OF_STOCK) stats.outOfStock++;
+    });
+
+    return of(stats).pipe(delay(100));
+  }
+
+  /**
+   * รีเซ็ตข้อมูลกลับเป็น Mock Data เริ่มต้น
+   */
+  resetToMockData(): void {
+    this.products = [...MOCK_PRODUCTS];
+    this.nextId = 5;
+    console.log('Reset to mock data:', this.products.length, 'products');
   }
 }

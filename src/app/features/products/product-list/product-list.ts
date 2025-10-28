@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
-import { Product, ProductCreateDto, Category, MOCK_PRODUCTS, MOCK_CATEGORIES } from '../../../shared/models';
+import { Product, ProductCreateDto, Category, MOCK_CATEGORIES } from '../../../shared/models';
+import { ProductService } from '../../../core/services/product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -10,12 +11,11 @@ import { Product, ProductCreateDto, Category, MOCK_PRODUCTS, MOCK_CATEGORIES } f
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
-export class ProductList {
+export class ProductList implements OnInit {
   /**
    * รายการสินค้าทั้งหมด
-   * เริ่มต้นด้วย Mock Data 4 รายการ
    */
-  products: Product[] = [...MOCK_PRODUCTS];
+  products: Product[] = [];
 
   /**
    * รายการหมวดหมู่ทั้งหมด
@@ -23,34 +23,59 @@ export class ProductList {
   categories: Category[] = MOCK_CATEGORIES.filter(c => c.isActive);
 
   /**
+   * Loading state
+   */
+  isLoading = false;
+
+  constructor(private productService: ProductService) {}
+
+  ngOnInit() {
+    this.loadProducts();
+  }
+
+  /**
+   * โหลดข้อมูลสินค้าจาก Service
+   */
+  loadProducts() {
+    this.isLoading = true;
+
+    this.productService.getAll().subscribe({
+      next: (response) => {
+        this.products = response.products;
+        this.isLoading = false;
+        console.log('Loaded products:', this.products.length);
+      },
+      error: (error) => {
+        console.error('Error loading products:', error);
+        this.isLoading = false;
+        alert('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า');
+      }
+    });
+  }
+
+  /**
    * บันทึกสินค้าใหม่
    */
   onSaveProduct(productData: ProductCreateDto) {
     console.log('บันทึกสินค้า:', productData);
 
-    // สร้าง Product object ใหม่
-    const newProduct: Product = {
-      id: this.generateProductId(),
-      sku: productData.sku,
-      name: productData.name,
-      description: productData.description,
-      category: productData.category,
-      price: productData.price,
-      cost: productData.cost,
-      stock: productData.stock,
-      minStock: productData.minStock,
-      unit: productData.unit,
-      imageUrl: productData.imageUrl,
-      isActive: productData.isActive ?? true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    this.isLoading = true;
 
-    // เพิ่มสินค้าเข้า array
-    this.products.unshift(newProduct); // เพิ่มไว้ด้านบน
+    this.productService.create(productData).subscribe({
+      next: (newProduct) => {
+        console.log('Created product:', newProduct);
 
-    console.log('สินค้าทั้งหมด:', this.products);
-    alert(`บันทึกสินค้าสำเร็จ!\nชื่อ: ${newProduct.name}\nSKU: ${newProduct.sku}\nจำนวนสินค้าทั้งหมด: ${this.products.length}`);
+        // โหลดข้อมูลใหม่
+        this.loadProducts();
+
+        alert(`บันทึกสินค้าสำเร็จ!\nชื่อ: ${newProduct.name}\nSKU: ${newProduct.sku}\nID: ${newProduct.id}`);
+      },
+      error: (error) => {
+        console.error('Error creating product:', error);
+        this.isLoading = false;
+        alert('เกิดข้อผิดพลาดในการบันทึกสินค้า');
+      }
+    });
   }
 
   /**
@@ -58,23 +83,5 @@ export class ProductList {
    */
   onCancelProduct() {
     console.log('ยกเลิกการเพิ่มสินค้า');
-  }
-
-  /**
-   * สร้าง ID สินค้าแบบ unique
-   * Format: prod-XXX
-   */
-  private generateProductId(): string {
-    const existingIds = this.products.map(p => p.id);
-    let nextNumber = this.products.length + 1;
-    let newId = `prod-${String(nextNumber).padStart(3, '0')}`;
-
-    // ตรวจสอบว่า ID ซ้ำหรือไม่
-    while (existingIds.includes(newId)) {
-      nextNumber++;
-      newId = `prod-${String(nextNumber).padStart(3, '0')}`;
-    }
-
-    return newId;
   }
 }
