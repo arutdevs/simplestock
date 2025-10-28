@@ -6,7 +6,7 @@
 import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductCreateDto, Product } from '../../../../shared/models';
+import { ProductCreateDto, Product, Category, MOCK_CATEGORIES } from '../../../../shared/models';
 
 declare var bootstrap: any;
 
@@ -25,6 +25,9 @@ export class ProductFormModalComponent implements OnInit {
   productForm!: FormGroup;
   isEditMode = false;
   private modal: any;
+
+  // Categories
+  categories: Category[] = MOCK_CATEGORIES.filter(c => c.isActive);
 
   // Image handling
   imagePreview: string | null = null;

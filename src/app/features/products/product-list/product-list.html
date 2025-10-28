@@ -37,10 +37,10 @@
       <!-- Category Filter -->
       <div class="col-md-2 col-sm-6">
         <select class="form-select form-select-sm">
-          <option selected>ทุกหมวดหมู่</option>
-          <option>อิเล็กทรอนิกส์</option>
-          <option>เสื้อผ้า</option>
-          <option>อาหารและเครื่องดื่ม</option>
+          <option value="" selected>ทุกหมวดหมู่</option>
+          <option *ngFor="let category of categories" [value]="category.name">
+            {{ category.name }}
+          </option>
         </select>
       </div>
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
-import { Product, ProductCreateDto, MOCK_PRODUCTS } from '../../../shared/models';
+import { Product, ProductCreateDto, Category, MOCK_PRODUCTS, MOCK_CATEGORIES } from '../../../shared/models';
 
 @Component({
   selector: 'app-product-list',
@@ -16,6 +16,11 @@ export class ProductList {
    * เริ่มต้นด้วย Mock Data 4 รายการ
    */
   products: Product[] = [...MOCK_PRODUCTS];
+
+  /**
+   * รายการหมวดหมู่ทั้งหมด
+   */
+  categories: Category[] = MOCK_CATEGORIES.filter(c => c.isActive);
 
   /**
    * บันทึกสินค้าใหม่

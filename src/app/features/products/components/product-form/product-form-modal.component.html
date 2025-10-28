@@ -79,16 +79,14 @@
                 [class.is-invalid]="isFieldInvalid('category')"
               >
                 <option value="">-- เลือกหมวดหมู่ --</option>
-                <option value="อิเล็กทรอนิกส์">อิเล็กทรอนิกส์</option>
-                <option value="เสื้อผ้า">เสื้อผ้า</option>
-                <option value="อาหารและเครื่องดื่ม">อาหารและเครื่องดื่ม</option>
-                <option value="เครื่องใช้ในบ้าน">เครื่องใช้ในบ้าน</option>
-                <option value="เครื่องเขียน">เครื่องเขียน</option>
-                <option value="อื่นๆ">อื่นๆ</option>
+                <option *ngFor="let category of categories" [value]="category.name">
+                  <i [class]="'fas ' + category.icon"></i> {{ category.name }}
+                </option>
               </select>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('category')">
                 กรุณาเลือกหมวดหมู่
               </div>
+              <small class="text-muted">มี {{ categories.length }} หมวดหมู่</small>
             </div>
 
             <!-- หน่วยนับ -->
