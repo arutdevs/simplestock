@@ -13,7 +13,12 @@ import { ProductService } from '../../../services/product.service';
 })
 export class ProductList implements OnInit {
   /**
-   * รายการสินค้าทั้งหมด
+   * รายการสินค้าทั้งหมดจาก Service
+   */
+  allProducts: Product[] = [];
+
+  /**
+   * รายการสินค้าที่แสดงผล (หลัง filter)
    */
   products: Product[] = [];
 
@@ -26,6 +31,13 @@ export class ProductList implements OnInit {
    * Loading state
    */
   isLoading = false;
+
+  /**
+   * Filter states
+   */
+  searchTerm = '';
+  selectedCategory = '';
+  selectedStatus = '';
 
   constructor(private productService: ProductService) {}
 
@@ -40,10 +52,11 @@ export class ProductList implements OnInit {
     this.isLoading = true;
 
     this.productService.getAll().subscribe({
-      next: (response) => {
-        this.products = response.products;
+      next: (products) => {
+        this.allProducts = products;
+        this.products = products; // แสดงทั้งหมดตอนเริ่มต้น
         this.isLoading = false;
-        console.log('Loaded products:', this.products.length);
+        console.log('Loaded products:', this.allProducts.length);
       },
       error: (error) => {
         console.error('Error loading products:', error);
@@ -51,6 +64,39 @@ export class ProductList implements OnInit {
         alert('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า');
       }
     });
+  }
+
+  /**
+   * Filter สินค้า - ทำที่ Component
+   */
+  filterProducts() {
+    let filtered = [...this.allProducts];
+
+    // Filter by search term (name or SKU)
+    if (this.searchTerm) {
+      const search = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.name.toLowerCase().includes(search) ||
+        p.sku.toLowerCase().includes(search)
+      );
+    }
+
+    // Filter by category
+    if (this.selectedCategory) {
+      filtered = filtered.filter(p => p.category === this.selectedCategory);
+    }
+
+    // Filter by status
+    if (this.selectedStatus) {
+      filtered = filtered.filter(p => {
+        if (this.selectedStatus === 'active') return p.isActive;
+        if (this.selectedStatus === 'outofstock') return p.stock === 0;
+        return true;
+      });
+    }
+
+    this.products = filtered;
+    console.log('Filtered:', this.products.length, 'products');
   }
 
   /**
