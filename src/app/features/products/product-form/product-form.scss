@@ -1,0 +1,132 @@
+.page-header-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(103, 126, 234, 0.15);
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: #64748b;
+  margin-bottom: 0;
+}
+
+.form-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 32px rgba(103, 126, 234, 0.15);
+}
+
+.form-label-glass {
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 0.5rem;
+  display: block;
+
+  i {
+    color: #667eea;
+  }
+
+  .text-danger {
+    color: #ef4444;
+  }
+}
+
+.form-control-glass,
+.form-select-glass {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 4px rgba(103, 126, 234, 0.1);
+    background: rgba(255, 255, 255, 1);
+  }
+
+  &::placeholder {
+    color: #94a3b8;
+  }
+}
+
+textarea.form-control-glass {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.img-preview {
+  max-width: 300px;
+  max-height: 250px;
+  border-radius: 12px;
+  border: 1px solid rgba(103, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info-card {
+  background: rgba(103, 126, 234, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(103, 126, 234, 0.1);
+
+  h5 {
+    color: #667eea;
+    font-weight: 600;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    color: #475569;
+
+    strong {
+      color: #1e293b;
+    }
+  }
+}
+
+.alert {
+  border-radius: 12px;
+  border: none;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+
+  &.alert-success {
+    background: rgba(52, 211, 153, 0.1);
+    color: #059669;
+    border-left: 4px solid #10b981;
+  }
+
+  &.alert-danger {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border-left: 4px solid #ef4444;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .page-header-glass,
+  .form-glass {
+    padding: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
