@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
@@ -15,29 +15,29 @@ export class ProductList implements OnInit {
   /**
    * รายการสินค้าทั้งหมดจาก Service
    */
-  allProducts: Product[] = [];
+  allProducts = signal<Product[]>([]);
 
   /**
    * รายการสินค้าที่แสดงผล (หลัง filter)
    */
-  products: Product[] = [];
+  products = signal<Product[]>([]);
 
   /**
    * รายการหมวดหมู่ทั้งหมด
    */
-  categories: Category[] = MOCK_CATEGORIES.filter(c => c.isActive);
+  categories = signal<Category[]>(MOCK_CATEGORIES.filter(c => c.isActive));
 
   /**
    * Loading state
    */
-  isLoading = false;
+  isLoading = signal(false);
 
   /**
    * Filter states
    */
-  searchTerm = '';
-  selectedCategory = '';
-  selectedStatus = '';
+  searchTerm = signal('');
+  selectedCategory = signal('');
+  selectedStatus = signal('');
 
   constructor(private productService: ProductService) {}
 
@@ -49,18 +49,18 @@ export class ProductList implements OnInit {
    * โหลดข้อมูลสินค้าจาก Service
    */
   loadProducts() {
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     this.productService.getAll().subscribe({
       next: (products) => {
-        this.allProducts = products;
-        this.products = products; // แสดงทั้งหมดตอนเริ่มต้น
-        this.isLoading = false;
-        console.log('Loaded products:', this.allProducts.length);
+        this.allProducts.set(products);
+        this.products.set(products); // แสดงทั้งหมดตอนเริ่มต้น
+        this.isLoading.set(false);
+        console.log('Loaded products:', this.allProducts().length);
       },
       error: (error) => {
         console.error('Error loading products:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
         alert('เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า');
       }
     });
@@ -70,11 +70,11 @@ export class ProductList implements OnInit {
    * Filter สินค้า - ทำที่ Component
    */
   filterProducts() {
-    let filtered = [...this.allProducts];
+    let filtered = [...this.allProducts()];
 
     // Filter by search term (name or SKU)
-    if (this.searchTerm) {
-      const search = this.searchTerm.toLowerCase();
+    if (this.searchTerm()) {
+      const search = this.searchTerm().toLowerCase();
       filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(search) ||
         p.sku.toLowerCase().includes(search)
@@ -82,21 +82,21 @@ export class ProductList implements OnInit {
     }
 
     // Filter by category
-    if (this.selectedCategory) {
-      filtered = filtered.filter(p => p.category === this.selectedCategory);
+    if (this.selectedCategory()) {
+      filtered = filtered.filter(p => p.category === this.selectedCategory());
     }
 
     // Filter by status
-    if (this.selectedStatus) {
+    if (this.selectedStatus()) {
       filtered = filtered.filter(p => {
-        if (this.selectedStatus === 'active') return p.isActive;
-        if (this.selectedStatus === 'outofstock') return p.stock === 0;
+        if (this.selectedStatus() === 'active') return p.isActive;
+        if (this.selectedStatus() === 'outofstock') return p.stock === 0;
         return true;
       });
     }
 
-    this.products = filtered;
-    console.log('Filtered:', this.products.length, 'products');
+    this.products.set(filtered);
+    console.log('Filtered:', this.products().length, 'products');
   }
 
   /**
@@ -105,7 +105,7 @@ export class ProductList implements OnInit {
   onSaveProduct(productData: ProductCreateDto) {
     console.log('บันทึกสินค้า:', productData);
 
-    this.isLoading = true;
+    this.isLoading.set(true);
 
     this.productService.create(productData).subscribe({
       next: (newProduct) => {
@@ -118,7 +118,7 @@ export class ProductList implements OnInit {
       },
       error: (error) => {
         console.error('Error creating product:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
         alert('เกิดข้อผิดพลาดในการบันทึกสินค้า');
       }
     });

@@ -6,7 +6,7 @@
       <div class="modal-header">
         <h5 class="modal-title" id="productFormModalLabel">
           <i class="fas fa-plus-circle me-2"></i>
-          {{ isEditMode ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่' }}
+          {{ isEditMode() ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่' }}
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -79,14 +79,14 @@
                 [class.is-invalid]="isFieldInvalid('category')"
               >
                 <option value="">-- เลือกหมวดหมู่ --</option>
-                <option *ngFor="let category of categories" [value]="category.name">
+                <option *ngFor="let category of categories()" [value]="category.name">
                   <i [class]="'fas ' + category.icon"></i> {{ category.name }}
                 </option>
               </select>
               <div class="invalid-feedback" *ngIf="isFieldInvalid('category')">
                 กรุณาเลือกหมวดหมู่
               </div>
-              <small class="text-muted">มี {{ categories.length }} หมวดหมู่</small>
+              <small class="text-muted">มี {{ categories().length }} หมวดหมู่</small>
             </div>
 
             <!-- หน่วยนับ -->
@@ -208,7 +208,7 @@
               </label>
 
               <!-- Upload Area -->
-              <div class="upload-area" *ngIf="!imagePreview">
+              <div class="upload-area" *ngIf="!imagePreview()">
                 <div class="upload-area-content">
                   <i class="fas fa-cloud-upload-alt upload-icon"></i>
                   <p class="upload-text">คลิกเพื่อเลือกรูปภาพ</p>
@@ -224,10 +224,10 @@
               </div>
 
               <!-- Image Preview -->
-              <div *ngIf="imagePreview" class="image-preview-wrapper">
+              <div *ngIf="imagePreview()" class="image-preview-wrapper">
                 <div class="image-preview-container">
                   <div class="image-preview-box">
-                    <img [src]="imagePreview" alt="Preview" />
+                    <img [src]="imagePreview()" alt="Preview" />
                   </div>
                   <div class="image-preview-actions">
                     <button type="button" class="btn btn-danger btn-sm" (click)="removeImage()">
@@ -281,7 +281,7 @@
           [disabled]="productForm.invalid"
         >
           <i class="fas fa-save me-1"></i>
-          {{ isEditMode ? 'บันทึกการแก้ไข' : 'บันทึกสินค้า' }}
+          {{ isEditMode() ? 'บันทึกการแก้ไข' : 'บันทึกสินค้า' }}
         </button>
       </div>
     </div>

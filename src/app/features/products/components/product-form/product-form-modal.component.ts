@@ -3,7 +3,7 @@
  * Modal สำหรับเพิ่ม/แก้ไขข้อมูลสินค้า
  */
 
-import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectorRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductCreateDto, Product, Category, MOCK_CATEGORIES } from '../../../../shared/models';
@@ -23,16 +23,16 @@ export class ProductFormModalComponent implements OnInit {
   @Output() cancel = new EventEmitter<void>();
 
   productForm!: FormGroup;
-  isEditMode = false;
+  isEditMode = signal(false);
   private modal: any;
 
   // Categories
-  categories: Category[] = MOCK_CATEGORIES.filter(c => c.isActive);
+  categories = signal<Category[]>(MOCK_CATEGORIES.filter(c => c.isActive));
 
   // Image handling
-  imagePreview: string | null = null;
-  selectedFile: File | null = null;
-  selectedImageBase64: string | null = null;
+  imagePreview = signal<string | null>(null);
+  selectedFile = signal<File | null>(null);
+  selectedImageBase64 = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +44,7 @@ export class ProductFormModalComponent implements OnInit {
 
     // ถ้ามี product (Edit mode)
     if (this.product) {
-      this.isEditMode = true;
+      this.isEditMode.set(true);
       this.patchFormValue(this.product);
     }
   }
@@ -88,7 +88,7 @@ export class ProductFormModalComponent implements OnInit {
 
     // แสดง preview รูปภาพถ้ามี
     if (product.imageUrl) {
-      this.imagePreview = product.imageUrl;
+      this.imagePreview.set(product.imageUrl);
     }
   }
 
@@ -134,7 +134,7 @@ export class ProductFormModalComponent implements OnInit {
         cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
         stock: parseInt(formValue.stock),
         minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
-        imageUrl: this.selectedImageBase64 || undefined, // ใช้ base64 string จากไฟล์ที่เลือก
+        imageUrl: this.selectedImageBase64() || undefined, // ใช้ base64 string จากไฟล์ที่เลือก
         isActive: formValue.isActive
       };
 
@@ -197,15 +197,15 @@ export class ProductFormModalComponent implements OnInit {
         return;
       }
 
-      this.selectedFile = file;
+      this.selectedFile.set(file);
 
       // แปลงเป็น base64 และแสดง preview
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
           const base64String = e.target.result as string;
-          this.selectedImageBase64 = base64String;
-          this.imagePreview = base64String;
+          this.selectedImageBase64.set(base64String);
+          this.imagePreview.set(base64String);
 
           // บังคับให้ Angular update view ทันที
           this.cdr.detectChanges();
@@ -219,9 +219,9 @@ export class ProductFormModalComponent implements OnInit {
    * ลบรูปภาพที่เลือก
    */
   removeImage() {
-    this.selectedFile = null;
-    this.selectedImageBase64 = null;
-    this.imagePreview = null;
+    this.selectedFile.set(null);
+    this.selectedImageBase64.set(null);
+    this.imagePreview.set(null);
 
     // Clear file input
     const fileInput = document.getElementById('imageFile') as HTMLInputElement;
@@ -249,10 +249,10 @@ export class ProductFormModalComponent implements OnInit {
 
     // ถ้ามี product (Edit mode) ให้ patch form และแสดงรูป
     if (this.product) {
-      this.isEditMode = true;
+      this.isEditMode.set(true);
       this.patchFormValue(this.product);
     } else {
-      this.isEditMode = false;
+      this.isEditMode.set(false);
     }
 
     const modalElement = document.getElementById('productFormModal');

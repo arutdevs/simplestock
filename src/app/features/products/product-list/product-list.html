@@ -38,7 +38,7 @@
       <div class="col-md-2 col-sm-6">
         <select class="form-select form-select-sm">
           <option value="" selected>ทุกหมวดหมู่</option>
-          <option *ngFor="let category of categories" [value]="category.name">
+          <option *ngFor="let category of categories()" [value]="category.name">
             {{ category.name }}
           </option>
         </select>
@@ -67,7 +67,7 @@
 
   <!-- Product Grid - ใช้ *ngFor กับ products array -->
   <div class="row">
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" *ngFor="let product of products">
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" *ngFor="let product of products()">
       <div class="product-card">
         <!-- Product Image -->
         <div class="product-image-wrapper">
@@ -143,7 +143,7 @@
     </div>
 
     <!-- Empty State -->
-    <div class="col-12 text-center py-5" *ngIf="products.length === 0">
+    <div class="col-12 text-center py-5" *ngIf="products().length === 0">
       <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
       <h5 class="text-muted">ยังไม่มีสินค้า</h5>
       <p class="text-muted">คลิกปุ่ม "เพิ่มสินค้า" เพื่อเริ่มต้น</p>
