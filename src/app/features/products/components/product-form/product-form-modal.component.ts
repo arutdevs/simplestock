@@ -1,12 +1,27 @@
-/**
- * Product Form Modal Component
- * Modal สำหรับเพิ่ม/แก้ไขข้อมูลสินค้า
- */
-
-import { Component, EventEmitter, Input, Output, OnInit, ChangeDetectorRef, signal } from '@angular/core';
+// product-form-modal.component.ts
+import {
+  Component,
+  EventEmitter,
+  Output,
+  OnInit,
+  signal,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProductCreateDto, Product, Category, MOCK_CATEGORIES } from '../../../../shared/models';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  ProductCreateDto,
+  ProductUpdateDto,
+  Product,
+  Category,
+  MOCK_CATEGORIES,
+} from '../../../../shared/models';
+import { SweetAlertService } from '../../../../shared/services/alert-config.service';
 
 declare var bootstrap: any;
 
@@ -15,43 +30,29 @@ declare var bootstrap: any;
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './product-form-modal.component.html',
-  styleUrls: ['./product-form-modal.component.scss']
+  styleUrls: ['./product-form-modal.component.scss'],
 })
 export class ProductFormModalComponent implements OnInit {
-  @Input() product?: Product; // สำหรับ Edit mode
-  @Output() save = new EventEmitter<ProductCreateDto>();
+  @Output() save = new EventEmitter<ProductCreateDto | ProductUpdateDto>();
   @Output() cancel = new EventEmitter<void>();
+
+  private fb = inject(FormBuilder);
+  private sweetAlert = inject(SweetAlertService);
 
   productForm!: FormGroup;
   isEditMode = signal(false);
+  currentProductId = signal<string | null>(null);
   private modal: any;
 
-  // Categories
-  categories = signal<Category[]>(MOCK_CATEGORIES.filter(c => c.isActive));
-
-  // Image handling
+  categories = signal<Category[]>(MOCK_CATEGORIES.filter((c) => c.isActive));
   imagePreview = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
   selectedImageBase64 = signal<string | null>(null);
 
-  constructor(
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
-  ) {}
-
   ngOnInit() {
     this.initForm();
-
-    // ถ้ามี product (Edit mode)
-    if (this.product) {
-      this.isEditMode.set(true);
-      this.patchFormValue(this.product);
-    }
   }
 
-  /**
-   * สร้าง form with validators
-   */
   private initForm() {
     this.productForm = this.fb.group({
       sku: ['', [Validators.required, Validators.minLength(3)]],
@@ -64,13 +65,10 @@ export class ProductFormModalComponent implements OnInit {
       stock: [0, [Validators.required, Validators.min(0)]],
       minStock: [0],
       imageUrl: [''],
-      isActive: [true]
+      isActive: [true],
     });
   }
 
-  /**
-   * Patch ค่าเมื่ออยู่ใน Edit mode
-   */
   private patchFormValue(product: Product) {
     this.productForm.patchValue({
       sku: product.sku,
@@ -83,26 +81,19 @@ export class ProductFormModalComponent implements OnInit {
       stock: product.stock,
       minStock: product.minStock || 0,
       imageUrl: product.imageUrl || '',
-      isActive: product.isActive
+      isActive: product.isActive,
     });
 
-    // แสดง preview รูปภาพถ้ามี
     if (product.imageUrl) {
       this.imagePreview.set(product.imageUrl);
     }
   }
 
-  /**
-   * ตรวจสอบว่า field มี error และถูก touch แล้ว
-   */
   isFieldInvalid(fieldName: string): boolean {
     const field = this.productForm.get(fieldName);
     return !!(field && field.invalid && (field.dirty || field.touched));
   }
 
-  /**
-   * คำนวณกำไร (ราคาขาย - ราคาทุน)
-   */
   calculateProfit(): string {
     const price = this.productForm.get('price')?.value || 0;
     const cost = this.productForm.get('cost')?.value || 0;
@@ -116,143 +107,151 @@ export class ProductFormModalComponent implements OnInit {
     return '0.00 บาท';
   }
 
-  /**
-   * Submit form
-   */
   onSubmit() {
     if (this.productForm.valid) {
       const formValue = this.productForm.value;
 
-      // สร้าง DTO
-      const productDto: ProductCreateDto = {
-        sku: formValue.sku,
-        name: formValue.name,
-        description: formValue.description || undefined,
-        category: formValue.category,
-        unit: formValue.unit,
-        price: parseFloat(formValue.price),
-        cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
-        stock: parseInt(formValue.stock),
-        minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
-        imageUrl: this.selectedImageBase64() || undefined, // ใช้ base64 string จากไฟล์ที่เลือก
-        isActive: formValue.isActive
-      };
+      if (this.isEditMode() && this.currentProductId()) {
+        // Edit Mode - ส่ง ProductUpdateDto
+        const productUpdateDto: ProductUpdateDto = {
+          id: this.currentProductId()!,
+          sku: formValue.sku,
+          name: formValue.name,
+          description: formValue.description || undefined,
+          category: formValue.category,
+          unit: formValue.unit,
+          price: parseFloat(formValue.price),
+          cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
+          stock: parseInt(formValue.stock),
+          minStock: formValue.minStock
+            ? parseInt(formValue.minStock)
+            : undefined,
+          imageUrl:
+            this.selectedImageBase64() || formValue.imageUrl || undefined,
+          isActive: formValue.isActive,
+        };
 
-      // Emit ข้อมูลออกไป
-      this.save.emit(productDto);
+        this.save.emit(productUpdateDto);
+      } else {
+        // Create Mode - ส่ง ProductCreateDto
+        const productCreateDto: ProductCreateDto = {
+          sku: formValue.sku,
+          name: formValue.name,
+          description: formValue.description || undefined,
+          category: formValue.category,
+          unit: formValue.unit,
+          price: parseFloat(formValue.price),
+          cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
+          stock: parseInt(formValue.stock),
+          minStock: formValue.minStock
+            ? parseInt(formValue.minStock)
+            : undefined,
+          imageUrl: this.selectedImageBase64() || undefined,
+          isActive: formValue.isActive,
+        };
 
-      // ปิด modal (closeModal จะ reset form และรูปให้อัตโนมัติ)
-      this.closeModal();
+        this.save.emit(productCreateDto);
+      }
     } else {
-      // Mark all fields as touched เพื่อแสดง validation errors
-      Object.keys(this.productForm.controls).forEach(key => {
+      Object.keys(this.productForm.controls).forEach((key) => {
         this.productForm.get(key)?.markAsTouched();
       });
     }
   }
 
-  /**
-   * เคลียร์ข้อมูลทั้งหมด
-   */
-  onClear() {
-    if (confirm('ต้องการเคลียร์ข้อมูลทั้งหมด?')) {
+  async onClear() {
+    const result = await this.sweetAlert.showConfirm({
+      title: 'ยืนยันการเคลียร์ข้อมูล',
+      text: 'ต้องการเคลียร์ข้อมูลทั้งหมด?',
+      icon: 'question',
+      confirmButtonText: 'ใช่, เคลียร์',
+      cancelButtonText: 'ยกเลิก',
+    });
+
+    if (result.isConfirmed) {
       this.productForm.reset({
         isActive: true,
         price: 0,
         cost: 0,
         stock: 0,
-        minStock: 0
+        minStock: 0,
       });
       this.removeImage();
     }
   }
 
-  /**
-   * ยกเลิก
-   */
   onCancel() {
     this.cancel.emit();
     this.closeModal();
   }
 
-  /**
-   * จัดการเมื่อเลือกไฟล์รูปภาพ
-   */
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
 
-      // ตรวจสอบขนาดไฟล์ (ไม่เกิน 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        alert('ขนาดไฟล์ใหญ่เกินไป! กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 5MB');
+        this.sweetAlert.showWarning(
+          'ขนาดไฟล์ใหญ่เกินไป',
+          'กรุณาเลือกไฟล์ที่มีขนาดไม่เกิน 5MB'
+        );
         input.value = '';
         return;
       }
 
-      // ตรวจสอบประเภทไฟล์
       if (!file.type.startsWith('image/')) {
-        alert('กรุณาเลือกไฟล์รูปภาพเท่านั้น');
+        this.sweetAlert.showWarning(
+          'ประเภทไฟล์ไม่ถูกต้อง',
+          'กรุณาเลือกไฟล์รูปภาพเท่านั้น'
+        );
         input.value = '';
         return;
       }
 
       this.selectedFile.set(file);
 
-      // แปลงเป็น base64 และแสดง preview
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         if (e.target?.result) {
           const base64String = e.target.result as string;
           this.selectedImageBase64.set(base64String);
           this.imagePreview.set(base64String);
-
-          // บังคับให้ Angular update view ทันที
-          this.cdr.detectChanges();
         }
       };
       reader.readAsDataURL(file);
     }
   }
 
-  /**
-   * ลบรูปภาพที่เลือก
-   */
   removeImage() {
     this.selectedFile.set(null);
     this.selectedImageBase64.set(null);
     this.imagePreview.set(null);
 
-    // Clear file input
     const fileInput = document.getElementById('imageFile') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
-
-    // บังคับให้ Angular update view ทันที
-    this.cdr.detectChanges();
   }
 
-  /**
-   * เปิด modal
-   */
-  openModal() {
-    // Reset form และรูปภาพทุกครั้งที่เปิด modal
+  openModal(product?: Product) {
     this.productForm.reset({
       isActive: true,
       price: 0,
       cost: 0,
       stock: 0,
-      minStock: 0
+      minStock: 0,
     });
     this.removeImage();
 
-    // ถ้ามี product (Edit mode) ให้ patch form และแสดงรูป
-    if (this.product) {
+    if (product) {
+      // Edit Mode
       this.isEditMode.set(true);
-      this.patchFormValue(this.product);
+      this.currentProductId.set(product.id!);
+      this.patchFormValue(product);
     } else {
+      // Create Mode
       this.isEditMode.set(false);
+      this.currentProductId.set(null);
     }
 
     const modalElement = document.getElementById('productFormModal');
@@ -262,22 +261,20 @@ export class ProductFormModalComponent implements OnInit {
     }
   }
 
-  /**
-   * ปิด modal
-   */
   closeModal() {
     if (this.modal) {
       this.modal.hide();
     }
 
-    // Reset form และรูปภาพเมื่อปิด modal
     this.productForm.reset({
       isActive: true,
       price: 0,
       cost: 0,
       stock: 0,
-      minStock: 0
+      minStock: 0,
     });
     this.removeImage();
+    this.isEditMode.set(false);
+    this.currentProductId.set(null);
   }
 }

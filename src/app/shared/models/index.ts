@@ -12,7 +12,7 @@ export type {
   ProductCreateDto,
   ProductUpdateDto,
   ProductListResponse,
-  ProductFilter
+  ProductFilter,
 } from './product.model';
 
 export {
@@ -20,22 +20,15 @@ export {
   ProductUnit,
   getStockStatus,
   calculateProfit,
-  calculateStockValue
+  calculateStockValue,
 } from './product.model';
 
 // Category Models
 export type {
   Category,
   CategoryCreateDto,
-  CategoryUpdateDto
+  CategoryUpdateDto,
 } from './category.model';
 
 // Mock Data
-export {
-  MOCK_PRODUCTS,
-  MOCK_CATEGORIES,
-  getProductsByCategory,
-  getProductsByStockStatus,
-  calculateTotalStockValue,
-  getStatsSummary
-} from './product.mock';
+export { MOCK_PRODUCTS, MOCK_CATEGORIES } from './product.mock';

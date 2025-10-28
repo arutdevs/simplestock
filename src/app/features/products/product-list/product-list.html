@@ -1,21 +1,21 @@
-<!-- product-list.component.html - Simple Inventory Management -->
+<!-- product-list.html -->
 <app-header></app-header>
 <div class="container-fluid mt-2 content-wrapper">
   <!-- Compact Toolbar: Stats + Search + Actions -->
   <div class="toolbar-section mb-2">
     <div class="row g-2 align-items-center">
-      <!-- Stats - Compact Inline -->
+      <!-- Stats - ใช้ข้อมูลจริง -->
       <div class="col-auto">
         <div class="stats-inline">
           <i class="fas fa-boxes text-primary"></i>
-          <span class="stats-value">156</span>
+          <span class="stats-value">{{ allProducts().length }}</span>
           <span class="stats-text">สินค้า</span>
         </div>
       </div>
       <div class="col-auto">
         <div class="stats-inline">
           <i class="fas fa-layer-group text-success"></i>
-          <span class="stats-value">24</span>
+          <span class="stats-value">{{ categories().length }}</span>
           <span class="stats-text">หมวดหมู่</span>
         </div>
       </div>
@@ -31,68 +31,110 @@
           type="text"
           class="form-control form-control-sm"
           placeholder="ค้นหาสินค้า, SKU..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
         />
       </div>
 
       <!-- Category Filter -->
       <div class="col-md-2 col-sm-6">
-        <select class="form-select form-select-sm">
-          <option value="" selected>ทุกหมวดหมู่</option>
-          <option *ngFor="let category of categories()" [value]="category.name">
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="selectedCategory()"
+          (ngModelChange)="selectedCategory.set($event)"
+        >
+          <option value="">ทุกหมวดหมู่</option>
+          @for (category of categories(); track category.id) {
+          <option [value]="category.name">
             {{ category.name }}
           </option>
+          }
         </select>
       </div>
 
       <!-- Status Filter -->
       <div class="col-md-2 col-sm-6">
-        <select class="form-select form-select-sm">
-          <option selected>ทุกสถานะ</option>
-          <option>เปิดใช้งาน</option>
-          <option>สินค้าหมด</option>
+        <select
+          class="form-select form-select-sm"
+          [ngModel]="selectedStatus()"
+          (ngModelChange)="selectedStatus.set($event)"
+        >
+          <option value="">ทุกสถานะ</option>
+          <option value="active">เปิดใช้งาน</option>
+          <option value="outofstock">สินค้าหมด</option>
         </select>
+      </div>
+
+      <!-- Clear Filter Button -->
+      <div class="col-md-2 col-sm-7">
+        <button
+          class="btn btn-outline-secondary btn-sm"
+          (click)="clearFilters()"
+          [disabled]="!searchTerm() && !selectedCategory() && !selectedStatus()"
+        >
+          <i class="fas fa-times me-1"></i>ล้างตัวกรอง
+        </button>
       </div>
 
       <!-- Actions -->
       <div class="col-auto ms-auto">
-        <button class="btn btn-success btn-sm" (click)="productModal.openModal()">
+        <button
+          class="btn btn-success btn-sm"
+          (click)="productFormModal.openModal()"
+        >
           <i class="fas fa-plus me-1"></i>เพิ่มสินค้า
-        </button>
-        <button class="btn btn-outline-secondary btn-sm ms-1">
-          <i class="fas fa-filter"></i>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Product Grid - ใช้ *ngFor กับ products array -->
+  <!-- Product Grid -->
   <div class="row">
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3" *ngFor="let product of products()">
+    @for (product of products(); track product.id) {
+    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3">
       <div class="product-card">
         <!-- Product Image -->
         <div class="product-image-wrapper">
-          <div class="product-image-placeholder" *ngIf="!product.imageUrl">
+          @if (!product.imageUrl) {
+          <div class="product-image-placeholder">
             <i class="fas fa-box"></i>
           </div>
-          <img *ngIf="product.imageUrl" [src]="product.imageUrl" class="product-image" [alt]="product.name" />
+          } @if (product.imageUrl) {
+          <img
+            [src]="product.imageUrl"
+            class="product-image"
+            [alt]="product.name"
+          />
+          }
 
           <!-- Status Badge -->
-          <span class="badge badge-status"
-                [ngClass]="{
-                  'badge-stock-in': product.stock > (product.minStock || 0),
-                  'badge-stock-low': product.stock > 0 && product.stock <= (product.minStock || 0),
-                  'badge-stock-out': product.stock === 0
-                }">
-            <i class="fas"
-               [ngClass]="{
-                 'fa-check-circle': product.stock > (product.minStock || 0),
-                 'fa-exclamation-triangle': product.stock > 0 && product.stock <= (product.minStock || 0),
-                 'fa-times-circle': product.stock === 0
-               }"
-               class="me-1"></i>
-            <span *ngIf="product.stock > (product.minStock || 0)">เปิดใช้งาน</span>
-            <span *ngIf="product.stock > 0 && product.stock <= (product.minStock || 0)">คงเหลือต่ำ</span>
-            <span *ngIf="product.stock === 0">สินค้าหมด</span>
+          <span
+            class="badge badge-status"
+            [ngClass]="{
+              'badge-stock-in': product.stock > (product.minStock || 0),
+              'badge-stock-low':
+                product.stock > 0 && product.stock <= (product.minStock || 0),
+              'badge-stock-out': product.stock === 0
+            }"
+          >
+            <i
+              class="fas"
+              [ngClass]="{
+                'fa-check-circle': product.stock > (product.minStock || 0),
+                'fa-exclamation-triangle':
+                  product.stock > 0 && product.stock <= (product.minStock || 0),
+                'fa-times-circle': product.stock === 0
+              }"
+              class="me-1"
+            ></i>
+            @if (product.stock > (product.minStock || 0)) {
+            <span>เปิดใช้งาน</span>
+            } @if (product.stock > 0 && product.stock <= (product.minStock ||
+            0)) {
+            <span>คงเหลือต่ำ</span>
+            } @if (product.stock === 0) {
+            <span>สินค้าหมด</span>
+            }
           </span>
         </div>
 
@@ -111,43 +153,73 @@
           <h5 class="product-title">{{ product.name }}</h5>
 
           <!-- Description -->
-          <p class="product-description" *ngIf="product.description">
+          @if (product.description) {
+          <p class="product-description">
             {{ product.description }}
           </p>
+          }
 
           <!-- Price & Stock -->
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag">฿{{ product.price.toLocaleString('th-TH', {minimumFractionDigits: 2, maximumFractionDigits: 2}) }}</span>
-            <span class="badge"
-                  [ngClass]="{
-                    'badge-stock-in': product.stock > (product.minStock || 0),
-                    'badge-stock-low': product.stock > 0 && product.stock <= (product.minStock || 0),
-                    'badge-stock-out': product.stock === 0
-                  }">
-              <i class="fas me-1"
-                 [ngClass]="{
-                   'fa-box': product.stock > (product.minStock || 0),
-                   'fa-exclamation-triangle': product.stock > 0 && product.stock <= (product.minStock || 0),
-                   'fa-ban': product.stock === 0
-                 }"></i>
+            <span class="price-tag"
+              >฿{{
+                product.price.toLocaleString("th-TH", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                })
+              }}</span
+            >
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-stock-in': product.stock > (product.minStock || 0),
+                'badge-stock-low':
+                  product.stock > 0 && product.stock <= (product.minStock || 0),
+                'badge-stock-out': product.stock === 0
+              }"
+            >
+              <i
+                class="fas me-1"
+                [ngClass]="{
+                  'fa-box': product.stock > (product.minStock || 0),
+                  'fa-exclamation-triangle':
+                    product.stock > 0 &&
+                    product.stock <= (product.minStock || 0),
+                  'fa-ban': product.stock === 0
+                }"
+              ></i>
               {{ product.stock }}
             </span>
           </div>
 
           <!-- Edit Button -->
-          <button class="btn btn-outline-primary btn-sm w-100">
+          <button
+            class="btn btn-outline-primary btn-sm w-100"
+            (click)="onEditProduct(product.id!)"
+          >
             <i class="fas fa-edit me-1"></i>แก้ไข
           </button>
         </div>
       </div>
     </div>
+    }
 
     <!-- Empty State -->
-    <div class="col-12 text-center py-5" *ngIf="products().length === 0">
+    @if (products().length === 0) {
+    <div class="col-12 text-center py-5">
       <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+      @if (searchTerm() || selectedCategory() || selectedStatus()) {
+      <h5 class="text-muted">ไม่พบสินค้าที่ตรงกับเงื่อนไข</h5>
+      <p class="text-muted">ลองเปลี่ยนตัวกรองหรือค้นหาใหม่</p>
+      <button class="btn btn-outline-primary btn-sm" (click)="clearFilters()">
+        <i class="fas fa-times me-1"></i>ล้างตัวกรอง
+      </button>
+      } @else {
       <h5 class="text-muted">ยังไม่มีสินค้า</h5>
       <p class="text-muted">คลิกปุ่ม "เพิ่มสินค้า" เพื่อเริ่มต้น</p>
+      }
     </div>
+    }
   </div>
 
   <!-- Pagination -->

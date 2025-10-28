@@ -1,14 +1,5 @@
-/**
- * Product Mock Data
- * ข้อมูลตัวอย่างสำหรับใช้ทดสอบระบบ
- */
+import { Product, Category } from './index';
 
-import { Product, Category, StockStatus } from './index';
-
-/**
- * Mock Categories
- * ข้อมูลหมวดหมู่ตัวอย่าง (ตรงกับ database schema)
- */
 export const MOCK_CATEGORIES: Category[] = [
   {
     id: 'cat-001',
@@ -19,7 +10,7 @@ export const MOCK_CATEGORIES: Category[] = [
     productCount: 2,
     isActive: true,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01')
+    updatedAt: new Date('2024-01-01'),
   },
   {
     id: 'cat-002',
@@ -30,7 +21,7 @@ export const MOCK_CATEGORIES: Category[] = [
     productCount: 1,
     isActive: true,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01')
+    updatedAt: new Date('2024-01-01'),
   },
   {
     id: 'cat-003',
@@ -41,7 +32,7 @@ export const MOCK_CATEGORIES: Category[] = [
     productCount: 1,
     isActive: true,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01')
+    updatedAt: new Date('2024-01-01'),
   },
   {
     id: 'cat-004',
@@ -52,7 +43,7 @@ export const MOCK_CATEGORIES: Category[] = [
     productCount: 0,
     isActive: true,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01')
+    updatedAt: new Date('2024-01-01'),
   },
   {
     id: 'cat-005',
@@ -63,14 +54,10 @@ export const MOCK_CATEGORIES: Category[] = [
     productCount: 0,
     isActive: true,
     createdAt: new Date('2024-01-01'),
-    updatedAt: new Date('2024-01-01')
-  }
+    updatedAt: new Date('2024-01-01'),
+  },
 ];
 
-/**
- * Mock Products
- * ข้อมูลสินค้าตัวอย่าง 4 รายการ (ตรงกับ database schema)
- */
 export const MOCK_PRODUCTS: Product[] = [
   {
     id: 'prod-001',
@@ -78,15 +65,15 @@ export const MOCK_PRODUCTS: Product[] = [
     name: 'Laptop Dell Inspiron 15',
     description: 'Intel Core i5 • 8GB RAM • 256GB SSD',
     category: 'อิเล็กทรอนิกส์',
-    price: 25900.00,
-    cost: 20000.00,
+    price: 25900.0,
+    cost: 20000.0,
     stock: 45,
     minStock: 10,
     unit: 'ชิ้น',
     imageUrl: undefined,
     isActive: true,
     createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15')
+    updatedAt: new Date('2024-01-15'),
   },
   {
     id: 'prod-002',
@@ -94,15 +81,15 @@ export const MOCK_PRODUCTS: Product[] = [
     name: 'เสื้อยืดคอกลม',
     description: '100% Cotton สีขาว ไซส์ M',
     category: 'เสื้อผ้า',
-    price: 299.00,
-    cost: 150.00,
+    price: 299.0,
+    cost: 150.0,
     stock: 120,
     minStock: 20,
     unit: 'ชิ้น',
     imageUrl: undefined,
     isActive: true,
     createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15')
+    updatedAt: new Date('2024-01-15'),
   },
   {
     id: 'prod-003',
@@ -110,15 +97,15 @@ export const MOCK_PRODUCTS: Product[] = [
     name: 'เมล็ดกาแฟอราบิก้า',
     description: 'คั่วกลาง 250 กรัม',
     category: 'อาหารและเครื่องดื่ม',
-    price: 350.00,
-    cost: 200.00,
+    price: 350.0,
+    cost: 200.0,
     stock: 15,
     minStock: 20,
     unit: 'แพ็ค',
     imageUrl: undefined,
     isActive: true,
     createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15')
+    updatedAt: new Date('2024-01-15'),
   },
   {
     id: 'prod-004',
@@ -126,52 +113,14 @@ export const MOCK_PRODUCTS: Product[] = [
     name: 'เมาส์ไร้สาย',
     description: 'Bluetooth เชื่อมต่อได้ 3 อุปกรณ์',
     category: 'อิเล็กทรอนิกส์',
-    price: 590.00,
-    cost: 350.00,
+    price: 590.0,
+    cost: 350.0,
     stock: 80,
     minStock: 15,
     unit: 'ชิ้น',
     imageUrl: undefined,
     isActive: true,
     createdAt: new Date('2024-01-15'),
-    updatedAt: new Date('2024-01-15')
-  }
+    updatedAt: new Date('2024-01-15'),
+  },
 ];
-
-/**
- * Helper: Get products by category
- */
-export function getProductsByCategory(categoryName: string): Product[] {
-  return MOCK_PRODUCTS.filter(p => p.category === categoryName);
-}
-
-/**
- * Helper: Get products by stock status
- */
-export function getProductsByStockStatus(status: StockStatus): Product[] {
-  return MOCK_PRODUCTS.filter(p => {
-    if (p.stock <= 0) return status === StockStatus.OUT_OF_STOCK;
-    if (p.minStock && p.stock <= p.minStock) return status === StockStatus.LOW_STOCK;
-    return status === StockStatus.IN_STOCK;
-  });
-}
-
-/**
- * Helper: Calculate total stock value
- */
-export function calculateTotalStockValue(): number {
-  return MOCK_PRODUCTS.reduce((total, p) => total + (p.stock * p.price), 0);
-}
-
-/**
- * Helper: Get stats summary
- */
-export function getStatsSummary() {
-  return {
-    totalProducts: MOCK_PRODUCTS.length,
-    totalCategories: MOCK_CATEGORIES.length,
-    lowStockCount: getProductsByStockStatus(StockStatus.LOW_STOCK).length,
-    outOfStockCount: getProductsByStockStatus(StockStatus.OUT_OF_STOCK).length,
-    totalValue: calculateTotalStockValue()
-  };
-}
