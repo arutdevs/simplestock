@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
 import { Product, ProductCreateDto, Category, MOCK_CATEGORIES } from '../../../shared/models';
-import { ProductService } from '../../../core/services/product.service';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-product-list',

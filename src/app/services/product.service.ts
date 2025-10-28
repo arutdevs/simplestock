@@ -16,7 +16,7 @@ import {
   StockStatus,
   MOCK_PRODUCTS,
   getStockStatus
-} from '../../shared/models';
+} from '../shared/models';
 
 @Injectable({
   providedIn: 'root'
