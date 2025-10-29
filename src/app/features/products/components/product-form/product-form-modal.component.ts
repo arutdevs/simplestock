@@ -14,13 +14,9 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import {
-  ProductCreateDto,
-  ProductUpdateDto,
-  Product,
-  Category,
-  MOCK_CATEGORIES,
-} from '../../../../shared/models';
+import { Product } from '../../../../shared/models/product.model';
+import { Category } from '../../../../shared/models/category.model';
+import { MOCK_CATEGORIES } from '../../../../shared/models/product.mock';
 import { SweetAlertService } from '../../../../shared/services/alert-config.service';
 
 declare var bootstrap: any;
@@ -33,7 +29,7 @@ declare var bootstrap: any;
   styleUrls: ['./product-form-modal.component.scss'],
 })
 export class ProductFormModalComponent implements OnInit {
-  @Output() save = new EventEmitter<ProductCreateDto | ProductUpdateDto>();
+  @Output() save = new EventEmitter<Partial<Product>>();
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
@@ -112,8 +108,8 @@ export class ProductFormModalComponent implements OnInit {
       const formValue = this.productForm.value;
 
       if (this.isEditMode() && this.currentProductId()) {
-        // Edit Mode - ส่ง ProductUpdateDto
-        const productUpdateDto: ProductUpdateDto = {
+        // Edit Mode
+        const productData: Partial<Product> = {
           id: this.currentProductId()!,
           sku: formValue.sku,
           name: formValue.name,
@@ -131,10 +127,10 @@ export class ProductFormModalComponent implements OnInit {
           isActive: formValue.isActive,
         };
 
-        this.save.emit(productUpdateDto);
+        this.save.emit(productData);
       } else {
-        // Create Mode - ส่ง ProductCreateDto
-        const productCreateDto: ProductCreateDto = {
+        // Create Mode
+        const productData: Partial<Product> = {
           sku: formValue.sku,
           name: formValue.name,
           description: formValue.description || undefined,
@@ -150,7 +146,7 @@ export class ProductFormModalComponent implements OnInit {
           isActive: formValue.isActive,
         };
 
-        this.save.emit(productCreateDto);
+        this.save.emit(productData);
       }
     } else {
       Object.keys(this.productForm.controls).forEach((key) => {

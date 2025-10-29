@@ -3,11 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import {
-  Product,
-  ProductCreateDto, // ยังใช้ชื่อเดิมได้!
-  ProductUpdateDto, // ยังใช้ชื่อเดิมได้!
-} from '../shared/models';
+import { Product } from '../shared/models/product.model';
 import { ApiResponse } from '../shared/models/api-response.model';
 import { environment } from '../../environments/environment';
 
@@ -31,13 +27,13 @@ export class ProductService {
       .pipe(map((res) => res.data!));
   }
 
-  create(productDto: ProductCreateDto): Observable<Product> {
+  create(productDto: Partial<Product>): Observable<Product> {
     return this.http
       .post<ApiResponse<Product>>(this.apiUrl, productDto)
       .pipe(map((res) => res.data!));
   }
 
-  update(productDto: ProductUpdateDto): Observable<Product> {
+  update(productDto: Product): Observable<Product> {
     return this.http
       .put<ApiResponse<Product>>(`${this.apiUrl}/${productDto.id}`, productDto)
       .pipe(map((res) => res.data!));

@@ -2,12 +2,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
-import {
-  Product,
-  ProductCreateDto,
-  ProductUpdateDto,
-  MOCK_PRODUCTS,
-} from '../shared/models';
+import { Product } from '../shared/models/product.model';
+import { MOCK_PRODUCTS } from '../shared/models/product.mock';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +24,7 @@ export class ProductMockService {
     return of({ ...product }).pipe(delay(200));
   }
 
-  create(productDto: ProductCreateDto): Observable<Product> {
+  create(productDto: Partial<Product>): Observable<Product> {
     const newProduct: Product = {
       ...productDto,
       id: `prod-${String(this.nextId++).padStart(3, '0')}`,
@@ -40,7 +36,7 @@ export class ProductMockService {
     return of({ ...newProduct }).pipe(delay(300));
   }
 
-  update(productDto: ProductUpdateDto): Observable<Product> {
+  update(productDto: Product): Observable<Product> {
     const index = this.products.findIndex((p) => p.id === productDto.id);
     if (index === -1) {
       return throwError(() => new Error(`ไม่พบสินค้า ID: ${productDto.id}`));

@@ -1,4 +1,5 @@
-import { Product, Category } from './index';
+import { Product } from './product.model';
+import { Category } from './category.model';
 
 export const MOCK_CATEGORIES: Category[] = [
   {

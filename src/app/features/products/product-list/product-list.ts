@@ -11,13 +11,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Header } from '../../../shared/layout/header/header';
 import { ProductFormModalComponent } from '../components/product-form/product-form-modal.component';
-import {
-  Product,
-  ProductCreateDto,
-  ProductUpdateDto, // ✅ เพิ่ม import นี้
-  Category,
-  MOCK_CATEGORIES,
-} from '../../../shared/models';
+import { Product } from '../../../shared/models/product.model';
+import { Category } from '../../../shared/models/category.model';
+import { MOCK_CATEGORIES } from '../../../shared/models/product.mock';
 import { ProductMockService } from '../../../services/product-mockup.service';
 import { SweetAlertService } from '../../../shared/services/alert-config.service';
 
@@ -107,14 +103,13 @@ export class ProductList implements OnInit {
     });
   }
 
-  // ✅ แก้ type ให้รับทั้ง ProductCreateDto และ ProductUpdateDto
-  onSaveProduct(productData: ProductCreateDto | ProductUpdateDto) {
+  onSaveProduct(productData: Partial<Product>) {
     this.sweetAlert.showLoading('กำลังบันทึกสินค้า...');
 
     // ✅ เช็คว่าเป็น Edit หรือ Create โดยดูจาก id
     if ('id' in productData && productData.id) {
       // Edit mode - เรียก update
-      this.productService.update(productData as ProductUpdateDto).subscribe({
+      this.productService.update(productData as Product).subscribe({
         next: (updatedProduct) => {
           this.sweetAlert.close();
           this.loadProducts();
@@ -135,7 +130,7 @@ export class ProductList implements OnInit {
       });
     } else {
       // Create mode - เรียก create
-      this.productService.create(productData as ProductCreateDto).subscribe({
+      this.productService.create(productData).subscribe({
         next: (newProduct) => {
           this.sweetAlert.close();
           this.loadProducts();
