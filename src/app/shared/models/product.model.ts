@@ -37,19 +37,6 @@ export interface Product {
   createdAt?: Date;
   updatedAt?: Date;
 }
-
-/**
- * ใช้ TypeScript Utility Types แทนการเขียนซ้ำ
- */
-// สำหรับ Create - ไม่มี id, createdAt, updatedAt
-export type ProductCreateDto = Omit<Product, 'id' | 'createdAt' | 'updatedAt'>;
-
-// สำหรับ Update - ทุก field optional ยกเว้น id
-export type ProductUpdateDto = Partial<Product> & { id: string };
-
-/**
- * ProductListResponse
- */
 export interface ProductListResponse {
   products: Product[];
   total: number;
@@ -58,9 +45,6 @@ export interface ProductListResponse {
   totalPages: number;
 }
 
-/**
- * ProductFilter
- */
 export interface ProductFilter {
   search?: string;
   category?: string;
@@ -72,32 +56,4 @@ export interface ProductFilter {
   pageSize?: number;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
-}
-
-/**
- * Helper function: คำนวณสถานะสต็อก
- */
-export function getStockStatus(product: Product): StockStatus {
-  if (product.stock <= 0) {
-    return StockStatus.OUT_OF_STOCK;
-  }
-  if (product.minStock && product.stock <= product.minStock) {
-    return StockStatus.LOW_STOCK;
-  }
-  return StockStatus.IN_STOCK;
-}
-
-/**
- * Helper function: คำนวณกำไรต่อหน่วย
- */
-export function calculateProfit(product: Product): number | null {
-  if (!product.cost) return null;
-  return product.price - product.cost;
-}
-
-/**
- * Helper function: คำนวณมูลค่าสต็อก
- */
-export function calculateStockValue(product: Product): number {
-  return product.stock * product.price;
 }

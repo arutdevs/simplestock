@@ -1,105 +1,103 @@
-<!-- product-form-modal.component.html -->
-<div class="modal fade" id="productFormModal" tabindex="-1" aria-labelledby="productFormModalLabel" aria-hidden="true" data-bs-backdrop="static">
+<!-- product-form-modal.component.html (Angular 17+ Control Flow) -->
+<div class="modal fade" id="productFormModal" tabindex="-1" aria-labelledby="productFormModalLabel" aria-hidden="true"
+  data-bs-backdrop="static">
   <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
+    <div class="modal-content border-0 shadow-lg">
+
       <!-- Modal Header -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="productFormModalLabel">
-          <i class="fas fa-plus-circle me-2"></i>
+      <div class="modal-header bg-primary bg-gradient text-white border-0 py-2 px-3">
+        <h6 class="modal-title fw-bold mb-0" id="productFormModalLabel">
+          <i class="fas fa-plus-circle me-2 opacity-75"></i>
           {{ isEditMode() ? 'แก้ไขสินค้า' : 'เพิ่มสินค้าใหม่' }}
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </h6>
+        <button type="button" class="btn-close btn-close-white btn-sm" data-bs-dismiss="modal"
+          aria-label="Close"></button>
       </div>
 
       <!-- Modal Body -->
-      <div class="modal-body">
+      <div class="modal-body bg-light p-3">
         <form [formGroup]="productForm" id="productFormId">
           <div class="row g-2">
+
             <!-- SKU -->
             <div class="col-md-6">
-              <label for="sku" class="form-label required">
-                <i class="fas fa-hashtag me-1"></i>รหัสสินค้า (SKU)
+              <label for="sku" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-hashtag me-1 text-primary opacity-75"></i>รหัสสินค้า (SKU)
               </label>
-              <input
-                type="text"
-                class="form-control"
-                id="sku"
-                formControlName="sku"
-                placeholder="เช่น LAP-001"
-                [class.is-invalid]="isFieldInvalid('sku')"
-              />
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('sku')">
-                <span *ngIf="productForm.get('sku')?.errors?.['required']">กรุณากรอกรหัสสินค้า</span>
-                <span *ngIf="productForm.get('sku')?.errors?.['minlength']">รหัสสินค้าต้องมีอย่างน้อย 3 ตัวอักษร</span>
+              <input type="text" class="form-control form-control-sm" id="sku" formControlName="sku"
+                placeholder="เช่น LAP-001" [class.is-invalid]="isFieldInvalid('sku')" />
+
+              @if (isFieldInvalid('sku')) {
+              <div class="invalid-feedback small">
+                @if (productForm.get('sku')?.errors?.['required']) {
+                <span>กรุณากรอกรหัสสินค้า</span>
+                }
+                @if (productForm.get('sku')?.errors?.['minlength']) {
+                <span>รหัสสินค้าต้องมีอย่างน้อย 3 ตัวอักษร</span>
+                }
               </div>
+              }
             </div>
 
             <!-- ชื่อสินค้า -->
             <div class="col-md-6">
-              <label for="name" class="form-label required">
-                <i class="fas fa-tag me-1"></i>ชื่อสินค้า
+              <label for="name" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-tag me-1 text-primary opacity-75"></i>ชื่อสินค้า
               </label>
-              <input
-                type="text"
-                class="form-control"
-                id="name"
-                formControlName="name"
-                placeholder="เช่น โน้ตบุ๊ค Dell Inspiron"
-                [class.is-invalid]="isFieldInvalid('name')"
-              />
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('name')">
-                <span *ngIf="productForm.get('name')?.errors?.['required']">กรุณากรอกชื่อสินค้า</span>
-                <span *ngIf="productForm.get('name')?.errors?.['minlength']">ชื่อสินค้าต้องมีอย่างน้อย 3 ตัวอักษร</span>
+              <input type="text" class="form-control form-control-sm" id="name" formControlName="name"
+                placeholder="เช่น โน้ตบุ๊ค Dell Inspiron" [class.is-invalid]="isFieldInvalid('name')" />
+
+              @if (isFieldInvalid('name')) {
+              <div class="invalid-feedback small">
+                @if (productForm.get('name')?.errors?.['required']) {
+                <span>กรุณากรอกชื่อสินค้า</span>
+                }
+                @if (productForm.get('name')?.errors?.['minlength']) {
+                <span>ชื่อสินค้าต้องมีอย่างน้อย 3 ตัวอักษร</span>
+                }
               </div>
+              }
             </div>
 
             <!-- รายละเอียด -->
             <div class="col-12">
-              <label for="description" class="form-label">
-                <i class="fas fa-align-left me-1"></i>รายละเอียด
+              <label for="description" class="form-label fw-semibold small mb-1">
+                <i class="fas fa-align-left me-1 text-primary opacity-75"></i>รายละเอียด
               </label>
-              <textarea
-                class="form-control"
-                id="description"
-                formControlName="description"
-                rows="3"
+              <textarea class="form-control form-control-sm" id="description" formControlName="description" rows="2"
                 placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับสินค้า..."
-              ></textarea>
+                style="resize: vertical; min-height: 60px;"></textarea>
             </div>
 
             <!-- หมวดหมู่ -->
             <div class="col-md-6">
-              <label for="category" class="form-label required">
-                <i class="fas fa-layer-group me-1"></i>หมวดหมู่
+              <label for="category" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-layer-group me-1 text-primary opacity-75"></i>หมวดหมู่
               </label>
-              <select
-                class="form-select"
-                id="category"
-                formControlName="category"
-                [class.is-invalid]="isFieldInvalid('category')"
-              >
+              <select class="form-select form-select-sm" id="category" formControlName="category"
+                [class.is-invalid]="isFieldInvalid('category')">
                 <option value="">-- เลือกหมวดหมู่ --</option>
-                <option *ngFor="let category of categories()" [value]="category.name">
-                  <i [class]="'fas ' + category.icon"></i> {{ category.name }}
-                </option>
+                @for (category of categories(); track category.id) {
+                <option [value]="category.name">{{ category.name }}</option>
+                }
               </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('category')">
-                กรุณาเลือกหมวดหมู่
-              </div>
-              <small class="text-muted">มี {{ categories().length }} หมวดหมู่</small>
+
+              @if (isFieldInvalid('category')) {
+              <div class="invalid-feedback small">กรุณาเลือกหมวดหมู่</div>
+              }
+
+              <small class="form-text text-muted d-block" style="font-size: 0.7rem; margin-top: 0.125rem;">
+                มี {{ categories().length }} หมวดหมู่
+              </small>
             </div>
 
             <!-- หน่วยนับ -->
             <div class="col-md-6">
-              <label for="unit" class="form-label required">
-                <i class="fas fa-cube me-1"></i>หน่วยนับ
+              <label for="unit" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-cube me-1 text-primary opacity-75"></i>หน่วยนับ
               </label>
-              <select
-                class="form-select"
-                id="unit"
-                formControlName="unit"
-                [class.is-invalid]="isFieldInvalid('unit')"
-              >
+              <select class="form-select form-select-sm" id="unit" formControlName="unit"
+                [class.is-invalid]="isFieldInvalid('unit')">
                 <option value="">-- เลือกหน่วย --</option>
                 <option value="ชิ้น">ชิ้น</option>
                 <option value="กล่อง">กล่อง</option>
@@ -109,181 +107,151 @@
                 <option value="เมตร">เมตร</option>
                 <option value="เซ็ต">เซ็ต</option>
               </select>
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('unit')">
-                กรุณาเลือกหน่วยนับ
-              </div>
+
+              @if (isFieldInvalid('unit')) {
+              <div class="invalid-feedback small">กรุณาเลือกหน่วยนับ</div>
+              }
             </div>
 
             <!-- ราคาทุน -->
             <div class="col-md-4">
-              <label for="cost" class="form-label">
-                <i class="fas fa-dollar-sign me-1"></i>ราคาทุน
+              <label for="cost" class="form-label fw-semibold small mb-1">
+                <i class="fas fa-dollar-sign me-1 text-primary opacity-75"></i>ราคาทุน
               </label>
-              <input
-                type="number"
-                class="form-control"
-                id="cost"
-                formControlName="cost"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-              />
+              <input type="number" class="form-control form-control-sm" id="cost" formControlName="cost"
+                placeholder="0.00" min="0" step="0.01" />
             </div>
 
             <!-- ราคาขาย -->
             <div class="col-md-4">
-              <label for="price" class="form-label required">
-                <i class="fas fa-tags me-1"></i>ราคาขาย
+              <label for="price" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-tags me-1 text-primary opacity-75"></i>ราคาขาย
               </label>
-              <input
-                type="number"
-                class="form-control"
-                id="price"
-                formControlName="price"
-                placeholder="0.00"
-                min="0"
-                step="0.01"
-                [class.is-invalid]="isFieldInvalid('price')"
-              />
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('price')">
-                <span *ngIf="productForm.get('price')?.errors?.['required']">กรุณากรอกราคาขาย</span>
-                <span *ngIf="productForm.get('price')?.errors?.['min']">ราคาต้องมากกว่า 0</span>
+              <input type="number" class="form-control form-control-sm" id="price" formControlName="price"
+                placeholder="0.00" min="0" step="0.01" [class.is-invalid]="isFieldInvalid('price')" />
+
+              @if (isFieldInvalid('price')) {
+              <div class="invalid-feedback small">
+                @if (productForm.get('price')?.errors?.['required']) {
+                <span>กรุณากรอกราคาขาย</span>
+                }
+                @if (productForm.get('price')?.errors?.['min']) {
+                <span>ราคาต้องมากกว่า 0</span>
+                }
               </div>
+              }
             </div>
 
             <!-- กำไร (คำนวณอัตโนมัติ) -->
             <div class="col-md-4">
-              <label class="form-label">
-                <i class="fas fa-chart-line me-1"></i>กำไร
+              <label class="form-label fw-semibold small mb-1">
+                <i class="fas fa-chart-line me-1 text-primary opacity-75"></i>กำไร
               </label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="calculateProfit()"
-                readonly
-                disabled
-              />
+              <input type="text" class="form-control form-control-sm bg-light" [value]="calculateProfit()" readonly
+                disabled />
             </div>
 
             <!-- จำนวนคงเหลือ -->
             <div class="col-md-6">
-              <label for="stock" class="form-label required">
-                <i class="fas fa-boxes me-1"></i>จำนวนคงเหลือ
+              <label for="stock" class="form-label fw-semibold small mb-1 required">
+                <i class="fas fa-boxes me-1 text-primary opacity-75"></i>จำนวนคงเหลือ
               </label>
-              <input
-                type="number"
-                class="form-control"
-                id="stock"
-                formControlName="stock"
-                placeholder="0"
-                min="0"
-                [class.is-invalid]="isFieldInvalid('stock')"
-              />
-              <div class="invalid-feedback" *ngIf="isFieldInvalid('stock')">
-                <span *ngIf="productForm.get('stock')?.errors?.['required']">กรุณากรอกจำนวนคงเหลือ</span>
-                <span *ngIf="productForm.get('stock')?.errors?.['min']">จำนวนต้องมากกว่าหรือเท่ากับ 0</span>
+              <input type="number" class="form-control form-control-sm" id="stock" formControlName="stock"
+                placeholder="0" min="0" [class.is-invalid]="isFieldInvalid('stock')" />
+
+              @if (isFieldInvalid('stock')) {
+              <div class="invalid-feedback small">
+                @if (productForm.get('stock')?.errors?.['required']) {
+                <span>กรุณากรอกจำนวนคงเหลือ</span>
+                }
+                @if (productForm.get('stock')?.errors?.['min']) {
+                <span>จำนวนต้องมากกว่าหรือเท่ากับ 0</span>
+                }
               </div>
+              }
             </div>
 
             <!-- จำนวนขั้นต่ำ -->
             <div class="col-md-6">
-              <label for="minStock" class="form-label">
-                <i class="fas fa-exclamation-triangle me-1"></i>จำนวนขั้นต่ำ (แจ้งเตือน)
+              <label for="minStock" class="form-label fw-semibold small mb-1">
+                <i class="fas fa-exclamation-triangle me-1 text-primary opacity-75"></i>จำนวนขั้นต่ำ
               </label>
-              <input
-                type="number"
-                class="form-control"
-                id="minStock"
-                formControlName="minStock"
-                placeholder="0"
-                min="0"
-              />
-              <small class="text-muted">ระบบจะแจ้งเตือนเมื่อสินค้าเหลือต่ำกว่านี้</small>
+              <input type="number" class="form-control form-control-sm" id="minStock" formControlName="minStock"
+                placeholder="0" min="0" />
+              <small class="form-text text-muted d-block" style="font-size: 0.7rem; margin-top: 0.125rem;">
+                ระบบจะแจ้งเตือนเมื่อสินค้าเหลือต่ำกว่านี้
+              </small>
             </div>
 
             <!-- อัปโหลดรูปภาพ -->
             <div class="col-12">
-              <label for="imageFile" class="form-label">
-                <i class="fas fa-image me-1"></i>รูปภาพสินค้า
+              <label for="imageFile" class="form-label fw-semibold small mb-1">
+                <i class="fas fa-image me-1 text-primary opacity-75"></i>รูปภาพสินค้า
               </label>
 
               <!-- Upload Area -->
-              <div class="upload-area" *ngIf="!imagePreview()">
-                <div class="upload-area-content">
-                  <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                  <p class="upload-text">คลิกเพื่อเลือกรูปภาพ</p>
-                  <p class="upload-hint">รองรับไฟล์: JPG, PNG, GIF (ขนาดไม่เกิน 5MB)</p>
-                  <input
-                    type="file"
-                    class="form-control file-input"
-                    id="imageFile"
-                    (change)="onFileSelected($event)"
-                    accept="image/*"
-                  />
-                </div>
+              @if (!imagePreview()) {
+              <div class="upload-area-compact">
+                <i class="fas fa-cloud-upload-alt fs-3 text-secondary mb-2 d-block"></i>
+                <p class="fw-semibold mb-1 small">คลิกเพื่อเลือกรูปภาพ</p>
+                <p class="text-muted mb-0" style="font-size: 0.7rem;">JPG, PNG, GIF (ไม่เกิน 5MB)</p>
+                <input type="file" class="file-input" id="imageFile" (change)="onFileSelected($event)"
+                  accept="image/*" />
               </div>
+              }
 
               <!-- Image Preview -->
-              <div *ngIf="imagePreview()" class="image-preview-wrapper">
-                <div class="image-preview-container">
-                  <div class="image-preview-box">
-                    <img [src]="imagePreview()" alt="Preview" />
+              @if (imagePreview()) {
+              <div class="mt-2">
+                <div class="bg-white border rounded p-2">
+                  <div class="image-preview-box-compact bg-light border rounded p-2 mb-2">
+                    <img [src]="imagePreview()" alt="Preview" class="img-fluid rounded shadow-sm"
+                      style="max-height: 200px; object-fit: contain;" />
                   </div>
-                  <div class="image-preview-actions">
-                    <button type="button" class="btn btn-danger btn-sm" (click)="removeImage()">
-                      <i class="fas fa-trash me-1"></i>ลบรูปภาพ
+                  <div class="d-flex gap-2 justify-content-center">
+                    <button type="button" class="btn btn-danger btn-sm py-1 px-2" (click)="removeImage()">
+                      <i class="fas fa-trash me-1"></i>ลบ
                     </button>
-                    <label for="imageFile" class="btn btn-outline-primary btn-sm mb-0">
-                      <i class="fas fa-sync-alt me-1"></i>เปลี่ยนรูปภาพ
+                    <label for="imageFileChange" class="btn btn-outline-primary btn-sm py-1 px-2 mb-0">
+                      <i class="fas fa-sync-alt me-1"></i>เปลี่ยน
                     </label>
-                    <input
-                      type="file"
-                      class="d-none"
-                      id="imageFile"
-                      (change)="onFileSelected($event)"
-                      accept="image/*"
-                    />
+                    <input type="file" class="d-none" id="imageFileChange" (change)="onFileSelected($event)"
+                      accept="image/*" />
                   </div>
                 </div>
               </div>
+              }
             </div>
 
             <!-- สถานะการใช้งาน -->
-            <div class="col-12">
+            <div class="col-12 mt-1">
               <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="isActive"
-                  formControlName="isActive"
-                />
-                <label class="form-check-label" for="isActive">
-                  <i class="fas fa-toggle-on me-1"></i>เปิดใช้งานสินค้า
+                <input class="form-check-input" type="checkbox" role="switch" id="isActive" formControlName="isActive"
+                  style="width: 2.5rem; height: 1.25rem; cursor: pointer;" />
+                <label class="form-check-label fw-semibold small ms-2" for="isActive" style="cursor: pointer;">
+                  <i class="fas fa-toggle-on me-1 text-success"></i>เปิดใช้งานสินค้า
                 </label>
               </div>
             </div>
+
           </div>
         </form>
       </div>
 
       <!-- Modal Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="onClear()">
-          <i class="fas fa-eraser me-1"></i>เคลียร์ข้อมูล
+      <div class="modal-footer bg-body border-top d-flex gap-2 py-2 px-3">
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="onClear()">
+          <i class="fas fa-eraser me-1"></i>เคลียร์
         </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">
           <i class="fas fa-times me-1"></i>ยกเลิก
         </button>
-        <button
-          type="submit"
-          class="btn btn-primary"
-          (click)="onSubmit()"
-          [disabled]="productForm.invalid"
-        >
+        <button type="submit" class="btn btn-primary btn-sm" (click)="onSubmit()" [disabled]="productForm.invalid">
           <i class="fas fa-save me-1"></i>
-          {{ isEditMode() ? 'บันทึกการแก้ไข' : 'บันทึกสินค้า' }}
+          {{ isEditMode() ? 'บันทึก' : 'บันทึก' }}
         </button>
       </div>
+
     </div>
   </div>
 </div>

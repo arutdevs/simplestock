@@ -27,22 +27,14 @@
 
       <!-- Quick Search -->
       <div class="col-md-3 col-sm-12">
-        <input
-          type="text"
-          class="form-control form-control-sm"
-          placeholder="ค้นหาสินค้า, SKU..."
-          [ngModel]="searchTerm()"
-          (ngModelChange)="searchTerm.set($event)"
-        />
+        <input type="text" class="form-control form-control-sm" placeholder="ค้นหาสินค้า, SKU..."
+          [ngModel]="searchTerm()" (ngModelChange)="searchTerm.set($event)" />
       </div>
 
       <!-- Category Filter -->
       <div class="col-md-2 col-sm-6">
-        <select
-          class="form-select form-select-sm"
-          [ngModel]="selectedCategory()"
-          (ngModelChange)="selectedCategory.set($event)"
-        >
+        <select class="form-select form-select-sm" [ngModel]="selectedCategory()"
+          (ngModelChange)="selectedCategory.set($event)">
           <option value="">ทุกหมวดหมู่</option>
           @for (category of categories(); track category.id) {
           <option [value]="category.name">
@@ -54,11 +46,8 @@
 
       <!-- Status Filter -->
       <div class="col-md-2 col-sm-6">
-        <select
-          class="form-select form-select-sm"
-          [ngModel]="selectedStatus()"
-          (ngModelChange)="selectedStatus.set($event)"
-        >
+        <select class="form-select form-select-sm" [ngModel]="selectedStatus()"
+          (ngModelChange)="selectedStatus.set($event)">
           <option value="">ทุกสถานะ</option>
           <option value="active">เปิดใช้งาน</option>
           <option value="outofstock">สินค้าหมด</option>
@@ -66,22 +55,16 @@
       </div>
 
       <!-- Clear Filter Button -->
-      <div class="col-md-2 col-sm-7">
-        <button
-          class="btn btn-outline-secondary btn-sm"
-          (click)="clearFilters()"
-          [disabled]="!searchTerm() && !selectedCategory() && !selectedStatus()"
-        >
+      <!-- <div class="col-md-2 col-sm-7">
+        <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()"
+          [disabled]="!searchTerm() && !selectedCategory() && !selectedStatus()">
           <i class="fas fa-times me-1"></i>ล้างตัวกรอง
         </button>
-      </div>
+      </div> -->
 
       <!-- Actions -->
       <div class="col-auto ms-auto">
-        <button
-          class="btn btn-success btn-sm"
-          (click)="productFormModal.openModal()"
-        >
+        <button class="btn btn-success btn-sm" (click)="productFormModal.openModal()">
           <i class="fas fa-plus me-1"></i>เพิ่มสินค้า
         </button>
       </div>
@@ -100,41 +83,28 @@
             <i class="fas fa-box"></i>
           </div>
           } @if (product.imageUrl) {
-          <img
-            [src]="product.imageUrl"
-            class="product-image"
-            [alt]="product.name"
-          />
+          <img [src]="product.imageUrl" class="product-image" [alt]="product.name" />
           }
 
           <!-- Status Badge -->
-          <span
-            class="badge badge-status"
-            [ngClass]="{
+          <span class="badge badge-status" [ngClass]="{
               'badge-stock-in': product.stock > (product.minStock || 0),
               'badge-stock-low':
                 product.stock > 0 && product.stock <= (product.minStock || 0),
               'badge-stock-out': product.stock === 0
-            }"
-          >
-            <i
-              class="fas"
-              [ngClass]="{
+            }">
+            <i class="fas" [ngClass]="{
                 'fa-check-circle': product.stock > (product.minStock || 0),
                 'fa-exclamation-triangle':
                   product.stock > 0 && product.stock <= (product.minStock || 0),
                 'fa-times-circle': product.stock === 0
-              }"
-              class="me-1"
-            ></i>
+              }" class="me-1"></i>
             @if (product.stock > (product.minStock || 0)) {
             <span>เปิดใช้งาน</span>
-            } @if (product.stock > 0 && product.stock <= (product.minStock ||
-            0)) {
-            <span>คงเหลือต่ำ</span>
-            } @if (product.stock === 0) {
-            <span>สินค้าหมด</span>
-            }
+            } @if (product.stock > 0 && product.stock <= (product.minStock || 0)) { <span>คงเหลือต่ำ</span>
+          } @if (product.stock === 0) {
+          <span>สินค้าหมด</span>
+          }
           </span>
         </div>
 
@@ -161,42 +131,31 @@
 
           <!-- Price & Stock -->
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <span class="price-tag"
-              >฿{{
-                product.price.toLocaleString("th-TH", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2
-                })
-              }}</span
-            >
-            <span
-              class="badge"
-              [ngClass]="{
+            <span class="price-tag">฿{{
+              product.price.toLocaleString("th-TH", {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+              })
+              }}</span>
+            <span class="badge" [ngClass]="{
                 'badge-stock-in': product.stock > (product.minStock || 0),
                 'badge-stock-low':
                   product.stock > 0 && product.stock <= (product.minStock || 0),
                 'badge-stock-out': product.stock === 0
-              }"
-            >
-              <i
-                class="fas me-1"
-                [ngClass]="{
+              }">
+              <i class="fas me-1" [ngClass]="{
                   'fa-box': product.stock > (product.minStock || 0),
                   'fa-exclamation-triangle':
                     product.stock > 0 &&
                     product.stock <= (product.minStock || 0),
                   'fa-ban': product.stock === 0
-                }"
-              ></i>
+                }"></i>
               {{ product.stock }}
             </span>
           </div>
 
           <!-- Edit Button -->
-          <button
-            class="btn btn-outline-primary btn-sm w-100"
-            (click)="onEditProduct(product.id!)"
-          >
+          <button class="btn btn-outline-primary btn-sm w-100" (click)="onEditProduct(product.id!)">
             <i class="fas fa-edit me-1"></i>แก้ไข
           </button>
         </div>
@@ -259,8 +218,5 @@
 </div>
 
 <!-- Product Form Modal -->
-<app-product-form-modal
-  #productModal
-  (save)="onSaveProduct($event)"
-  (cancel)="onCancelProduct()"
-></app-product-form-modal>
+<app-product-form-modal #productModal (save)="onSaveProduct($event)"
+  (cancel)="onCancelProduct()"></app-product-form-modal>
