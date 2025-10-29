@@ -30,6 +30,7 @@ export class ProductList implements OnInit {
   allProducts = signal<Product[]>([]);
   categories = signal<Category[]>(MOCK_CATEGORIES.filter((c) => c.isActive));
   isLoading = signal(false);
+  isModalOpen = signal(false);
 
   searchTerm = signal('');
   selectedCategory = signal('');
@@ -92,6 +93,7 @@ export class ProductList implements OnInit {
     this.productService.getById(id).subscribe({
       next: (product) => {
         this.sweetAlert.close();
+        this.isModalOpen.set(true);
         this.productFormModal.openModal(product);
       },
       error: (error) => {
@@ -101,6 +103,11 @@ export class ProductList implements OnInit {
         );
       },
     });
+  }
+
+  onAddProduct() {
+    this.isModalOpen.set(true);
+    this.productFormModal.openModal();
   }
 
   onSaveProduct(productData: Partial<Product>) {
@@ -114,6 +121,7 @@ export class ProductList implements OnInit {
           this.sweetAlert.close();
           this.loadProducts();
 
+          this.isModalOpen.set(false);
           this.productFormModal.closeModal();
 
           this.sweetAlert.showSuccess(
@@ -135,6 +143,7 @@ export class ProductList implements OnInit {
           this.sweetAlert.close();
           this.loadProducts();
 
+          this.isModalOpen.set(false);
           this.productFormModal.closeModal();
 
           this.sweetAlert.showSuccess(
@@ -159,6 +168,6 @@ export class ProductList implements OnInit {
   }
 
   onCancelProduct() {
-    // Handle cancel logic if needed
+    this.isModalOpen.set(false);
   }
 }

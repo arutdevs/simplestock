@@ -3,6 +3,7 @@ import {
   Component,
   EventEmitter,
   Output,
+  Input,
   OnInit,
   signal,
   inject,
@@ -29,6 +30,7 @@ declare var bootstrap: any;
   styleUrls: ['./product-form-modal.component.scss'],
 })
 export class ProductFormModalComponent implements OnInit {
+  @Input() isOpen = false;
   @Output() save = new EventEmitter<Partial<Product>>();
   @Output() cancel = new EventEmitter<void>();
 
