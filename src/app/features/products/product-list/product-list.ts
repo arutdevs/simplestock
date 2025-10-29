@@ -14,8 +14,8 @@ import { ProductFormModalComponent } from '../components/product-form/product-fo
 import { Product } from '../../../shared/models/product.model';
 import { Category } from '../../../shared/models/category.model';
 import { MOCK_CATEGORIES } from '../../../shared/models/product.mock';
-import { ProductMockService } from '../../../services/product-mockup.service';
 import { SweetAlertService } from '../../../shared/services/alert-config.service';
+import { ProductService } from '../../../services/product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -61,7 +61,7 @@ export class ProductList implements OnInit {
     return filtered;
   });
 
-  private productService = inject(ProductMockService);
+  private productService = inject(ProductService);
   private sweetAlert = inject(SweetAlertService);
 
   ngOnInit() {
