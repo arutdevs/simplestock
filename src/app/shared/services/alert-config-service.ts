@@ -1,17 +1,6 @@
 import { Injectable } from '@angular/core';
 import Swal, { SweetAlertIcon, SweetAlertResult } from 'sweetalert2';
-
-export interface AlertConfig {
-  title?: string;
-  text?: string;
-  icon?: SweetAlertIcon;
-  confirmButtonText?: string;
-  cancelButtonText?: string;
-  showCancelButton?: boolean;
-  confirmButtonColor?: string;
-  cancelButtonColor?: string;
-  html?: string;
-}
+import { AlertConfig } from '../models/alert.model';
 
 @Injectable({
   providedIn: 'root',

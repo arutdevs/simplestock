@@ -5,10 +5,10 @@ export interface Product {
   description?: string;
   category: string;
   price: number;
-  cost?: number;
+  cost: number;
   stock: number;
-  minStock?: number;
-  unit: string;
+  minStock: number;
+  // unit: string;  ←
   imageUrl?: string;
   isActive?: boolean;
   createdAt?: Date;

@@ -8,6 +8,7 @@
 <div class="modal-body">
   <form [formGroup]="productForm" id="productFormId">
     <div class="row g-2">
+      <!-- SKU & ชื่อสินค้า -->
       <div class="col-md-6">
         <label for="sku" class="form-label fw-semibold small mb-1 required">
           <i class="fas fa-hashtag me-1 text-primary opacity-75"></i>รหัสสินค้า
@@ -21,7 +22,6 @@
           placeholder="เช่น LAP-001"
           [class.is-invalid]="isFieldInvalid('sku')"
         />
-
         @if (isFieldInvalid('sku')) {
         <div class="invalid-feedback small">
           @if (productForm.get('sku')?.errors?.['required']) {
@@ -45,7 +45,6 @@
           placeholder="เช่น โน้ตบุ๊ค Dell Inspiron"
           [class.is-invalid]="isFieldInvalid('name')"
         />
-
         @if (isFieldInvalid('name')) {
         <div class="invalid-feedback small">
           @if (productForm.get('name')?.errors?.['required']) {
@@ -57,22 +56,8 @@
         }
       </div>
 
-      <div class="col-12">
-        <label for="description" class="form-label fw-semibold small mb-1">
-          <i class="fas fa-align-left me-1 text-primary opacity-75"></i
-          >รายละเอียด
-        </label>
-        <textarea
-          class="form-control form-control-sm"
-          id="description"
-          formControlName="description"
-          rows="2"
-          placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับสินค้า..."
-          style="resize: vertical; min-height: 60px"
-        ></textarea>
-      </div>
-
-      <div class="col-md-6">
+      <!-- หมวดหมู่ -->
+      <div class="col-md-12">
         <label
           for="category"
           class="form-label fw-semibold small mb-1 required"
@@ -84,56 +69,30 @@
           class="form-select form-select-sm"
           id="category"
           formControlName="category"
-          [class.is-invalid]="isFieldInvalid('category')"
+          [ngClass]="{ 'border-danger': isFieldInvalid('category') }"
         >
           <option value="">กรุณาเลือก</option>
           @for (category of categories(); track category.id) {
           <option [value]="category.name">{{ category.name }}</option>
           }
         </select>
-
         @if (isFieldInvalid('category')) {
         <div class="invalid-feedback small">กรุณาเลือกหมวดหมู่</div>
         }
       </div>
 
-      <div class="col-md-6">
-        <label for="unit" class="form-label fw-semibold small mb-1 required">
-          <i class="fas fa-cube me-1 text-primary opacity-75"></i>หน่วยนับ
-        </label>
-        <select
-          class="form-select form-select-sm"
-          id="unit"
-          formControlName="unit"
-          [class.is-invalid]="isFieldInvalid('unit')"
-        >
-          <option value="">กรุณาเลือก</option>
-          <option value="ชิ้น">ชิ้น</option>
-          <option value="กล่อง">กล่อง</option>
-          <option value="แพ็ค">แพ็ค</option>
-          <option value="กิโลกรัม">กิโลกรัม</option>
-          <option value="ลิตร">ลิตร</option>
-          <option value="เมตร">เมตร</option>
-          <option value="เซ็ต">เซ็ต</option>
-        </select>
-
-        @if (isFieldInvalid('unit')) {
-        <div class="invalid-feedback small">กรุณาเลือกหน่วยนับ</div>
-        }
-      </div>
-
+      <!-- ราคาทุน, ราคาขาย, กำไร -->
       <div class="col-md-4">
         <label for="cost" class="form-label fw-semibold small mb-1">
           <i class="fas fa-dollar-sign me-1 text-primary opacity-75"></i>ราคาทุน
         </label>
         <input
-          type="number"
+          type="text"
           class="form-control form-control-sm"
           id="cost"
           formControlName="cost"
           placeholder="0.00"
-          min="0"
-          step="0.01"
+          (input)="onNumberInput($event, 'cost')"
         />
       </div>
 
@@ -142,16 +101,14 @@
           <i class="fas fa-tags me-1 text-primary opacity-75"></i>ราคาขาย
         </label>
         <input
-          type="number"
+          type="text"
           class="form-control form-control-sm"
           id="price"
           formControlName="price"
           placeholder="0.00"
-          min="0"
-          step="0.01"
+          (input)="onNumberInput($event, 'price')"
           [class.is-invalid]="isFieldInvalid('price')"
         />
-
         @if (isFieldInvalid('price')) {
         <div class="invalid-feedback small">
           @if (productForm.get('price')?.errors?.['required']) {
@@ -176,6 +133,7 @@
         />
       </div>
 
+      <!-- จำนวนคงเหลือ & จำนวนขั้นต่ำ -->
       <div class="col-md-6">
         <label for="stock" class="form-label fw-semibold small mb-1 required">
           <i class="fas fa-boxes me-1 text-primary opacity-75"></i>จำนวนคงเหลือ
@@ -189,7 +147,6 @@
           min="0"
           [class.is-invalid]="isFieldInvalid('stock')"
         />
-
         @if (isFieldInvalid('stock')) {
         <div class="invalid-feedback small">
           @if (productForm.get('stock')?.errors?.['required']) {
@@ -224,6 +181,23 @@
         </small>
       </div>
 
+      <!-- รายละเอียด -->
+      <div class="col-12">
+        <label for="description" class="form-label fw-semibold small mb-1">
+          <i class="fas fa-align-left me-1 text-primary opacity-75"></i
+          >รายละเอียด
+        </label>
+        <textarea
+          class="form-control form-control-sm"
+          id="description"
+          formControlName="description"
+          rows="2"
+          placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับสินค้า..."
+          style="resize: vertical; min-height: 60px"
+        ></textarea>
+      </div>
+
+      <!-- รูปภาพสินค้า -->
       <div class="col-12">
         <label for="imageFile" class="form-label fw-semibold small mb-1">
           <i class="fas fa-image me-1 text-primary opacity-75"></i>รูปภาพสินค้า
@@ -285,53 +259,27 @@
         </div>
         }
       </div>
-      <!-- <div class="col-12 mt-1">
-        <div class="form-check form-switch">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            role="switch"
-            id="isActive"
-            formControlName="isActive"
-            style="width: 2.5rem; height: 1.25rem; cursor: pointer"
-          />
-          <label
-            class="form-check-label fw-semibold small ms-2"
-            for="isActive"
-            style="cursor: pointer"
-          >
-            เปิดใช้งานสินค้า
-          </label>
-        </div>
-      </div> -->
     </div>
   </form>
 </div>
+
 <div class="modal-footer bg-body border-top d-flex gap-2 py-2 px-3">
   <button
     type="button"
-    ngbAutofocus
     class="btn btn-outline-secondary btn-sm"
     (click)="onClear()"
   >
     <i class="fas fa-eraser me-1"></i>เคลียร์
   </button>
-  <button
-    type="button"
-    (click)="closeModal()"
-    class="btn btn-secondary btn-sm"
-    data-bs-dismiss="modal"
-  >
+  <button type="button" (click)="closeModal()" class="btn btn-secondary btn-sm">
     <i class="fas fa-times me-1"></i>ยกเลิก
   </button>
   <button
     type="submit"
-    ngbAutofocus
     class="btn btn-primary btn-sm"
     (click)="onSubmit()"
     [disabled]="productForm.invalid"
   >
-    <i class="fas fa-save me-1"></i>
-    {{ isEditMode() ? "บันทึก" : "บันทึก" }}
+    <i class="fas fa-save me-1"></i>บันทึก
   </button>
 </div>

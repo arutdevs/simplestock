@@ -107,3 +107,14 @@ body {
 html {
   scroll-behavior: smooth;
 }
+// ✅ แก้ไอคอน invalid ไม่ให้ทับ dropdown
+.form-select.is-invalid {
+  background-position: right 2rem center, center right 0.75rem;
+  padding-right: 3rem;
+}
+
+// ✅ ปรับ invalid feedback ให้สวยขึ้น
+.invalid-feedback {
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}

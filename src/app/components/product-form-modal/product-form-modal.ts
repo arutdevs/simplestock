@@ -1,67 +1,54 @@
-// product-form-modal.component.ts
-import {
-  Component,
-  EventEmitter,
-  Output,
-  OnInit,
-  signal,
-  inject,
-} from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  ReactiveFormsModule,
   FormBuilder,
   FormGroup,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Product } from '../../../../shared/models/product.model';
-import { Category } from '../../../../shared/models/category.model';
-import { MOCK_CATEGORIES } from '../../../../shared/models/product.mock';
-import { SweetAlertService } from '../../../../shared/services/alert-config.service';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Product } from '../../shared/models/product.model';
+import { Category } from '../../shared/models/category.model';
+import { MOCK_CATEGORIES } from '../../shared/models/product.mock';
+import { SweetAlertService } from '../../shared/services/alert-config-service';
+import { CategoryService } from '../../services/category-service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-product-form-modal',
-  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './product-form-modal.component.html',
-  styleUrls: ['./product-form-modal.component.scss'],
+  templateUrl: './product-form-modal.html',
+  styleUrl: './product-form-modal.scss',
 })
-export class ProductFormModalComponent implements OnInit {
-  @Output() save = new EventEmitter<Partial<Product>>();
-  @Output() cancel = new EventEmitter<void>();
-
+export class ProductFormModal implements OnInit {
   private fb = inject(FormBuilder);
   private sweetAlert = inject(SweetAlertService);
   private activeModal = inject(NgbActiveModal);
+  private categoryService = inject(CategoryService);
 
   productForm!: FormGroup;
   isEditMode = signal(false);
   currentProductId = signal<string | null>(null);
 
-  categories = signal<Category[]>(MOCK_CATEGORIES.filter((c) => c.isActive));
+  categories = signal<Category[]>([]); // ✅ เปลี่ยนจาก hardcode
   imagePreview = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
   selectedImageBase64 = signal<string | null>(null);
 
   private _productDetail?: Product;
 
-  // ✅ Setter
   set productDetail(value: Product | undefined) {
-    console.log('🔵 Product detail received:', value);
+    console.log('Product detail received:', value);
     this._productDetail = value;
 
     if (value) {
-      // Edit Mode
       this.isEditMode.set(true);
       this.currentProductId.set(value.id!);
 
-      // ✅ เช็คว่า form พร้อมแล้วหรือยัง
       if (this.productForm) {
         this.patchFormValue(value);
       }
     } else {
-      // Create Mode
       this.isEditMode.set(false);
       this.currentProductId.set(null);
 
@@ -75,18 +62,35 @@ export class ProductFormModalComponent implements OnInit {
     return this._productDetail;
   }
 
-  // ✅ สร้าง form ใน constructor แทน ngOnInit
   constructor() {
     this.initForm();
   }
 
   ngOnInit() {
-    // ✅ ถ้ามีข้อมูลที่ถูกส่งมาแล้ว ให้ patch ตอนนี้
+    // ✅ โหลด categories จาก API
+    this.loadCategories();
+
     if (this._productDetail) {
       this.patchFormValue(this._productDetail);
     } else {
       this.resetForm();
     }
+  }
+
+  // ✅ เพิ่ม method โหลด categories
+  private loadCategories() {
+    this.categoryService
+      .getAll()
+      .pipe(map((response) => response.data ?? []))
+      .subscribe({
+        next: (categories) => {
+          this.categories.set(categories);
+        },
+        error: (error) => {
+          console.error('Error loading categories:', error);
+          this.categories.set([]);
+        },
+      });
   }
 
   private initForm() {
@@ -95,7 +99,6 @@ export class ProductFormModalComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
       category: ['', Validators.required],
-      unit: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0.01)]],
       cost: [0],
       stock: [0, [Validators.required, Validators.min(0)]],
@@ -106,14 +109,13 @@ export class ProductFormModalComponent implements OnInit {
   }
 
   private patchFormValue(product: Product) {
-    console.log('📝 Loading product to form:', product);
+    console.log('Loading product to form:', product);
 
     this.productForm.patchValue({
       sku: product.sku,
       name: product.name,
       description: product.description || '',
       category: product.category,
-      unit: product.unit,
       price: product.price,
       cost: product.cost || 0,
       stock: product.stock,
@@ -129,11 +131,16 @@ export class ProductFormModalComponent implements OnInit {
 
   private resetForm() {
     this.productForm.reset({
-      isActive: true,
+      sku: '',
+      name: '',
+      description: '',
+      category: '',
       price: 0,
       cost: 0,
       stock: 0,
       minStock: 0,
+      imageUrl: '',
+      isActive: true,
     });
     this.removeImage();
   }
@@ -156,6 +163,26 @@ export class ProductFormModalComponent implements OnInit {
     return '0.00 บาท';
   }
 
+  onNumberInput(event: Event, fieldName: string) {
+    const input = event.target as HTMLInputElement;
+    let value = input.value;
+
+    value = value.replace(/[^0-9.]/g, '');
+
+    const parts = value.split('.');
+    if (parts.length > 2) {
+      value = parts[0] + '.' + parts.slice(1).join('');
+    }
+
+    if (parts.length === 2 && parts[1].length > 2) {
+      value = parts[0] + '.' + parts[1].substring(0, 2);
+    }
+
+    input.value = value;
+
+    this.productForm.get(fieldName)?.setValue(value, { emitEvent: false });
+  }
+
   onSubmit() {
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
@@ -164,26 +191,24 @@ export class ProductFormModalComponent implements OnInit {
 
     const formValue = this.productForm.value;
 
-    const productData: Partial<Product> = {
+    const productData: Product = {
       sku: formValue.sku,
       name: formValue.name,
-      description: formValue.description || undefined,
+      description: formValue.description || '',
       category: formValue.category,
-      unit: formValue.unit,
-      price: parseFloat(formValue.price),
-      cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
-      stock: parseInt(formValue.stock),
-      minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
+      price: parseFloat(formValue.price) || 0,
+      cost: parseFloat(formValue.cost) || 0,
+      stock: parseInt(formValue.stock) || 0,
+      minStock: parseInt(formValue.minStock) || 0,
       imageUrl: this.selectedImageBase64() || formValue.imageUrl || undefined,
-      isActive: formValue.isActive,
+      isActive: formValue.isActive ?? true,
     };
 
-    // ถ้าเป็น edit mode ให้ใส่ id
     if (this.isEditMode() && this.currentProductId()) {
       productData.id = this.currentProductId()!;
     }
 
-    console.log('💾 Submitting product:', productData);
+    console.log('Submitting product:', productData);
 
     this.activeModal.close(productData);
   }
@@ -201,11 +226,6 @@ export class ProductFormModalComponent implements OnInit {
       this.resetForm();
       this.sweetAlert.showSuccess('เคลียร์ข้อมูลเรียบร้อย', '');
     }
-  }
-
-  onCancel() {
-    this.cancel.emit();
-    this.closeModal();
   }
 
   onFileSelected(event: Event) {
