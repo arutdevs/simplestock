@@ -30,7 +30,29 @@ export class ProductList implements OnInit {
   isLoading = signal(false);
   searchTerm = signal('');
   selectedCategory = signal('');
-
+  productStats = computed(() => {
+    const all = this.allProducts();
+    console.log({
+      total: all.length,
+      available: all.filter((p) => p.isActive && p.stock > (p.minStock || 0))
+        .length,
+      lowStock: all.filter(
+        (p) => p.isActive && p.stock > 0 && p.stock <= (p.minStock || 0)
+      ).length,
+      outOfStock: all.filter((p) => p.isActive && p.stock === 0).length,
+      inactive: all.filter((p) => !p.isActive).length,
+    });
+    return {
+      total: all.length,
+      available: all.filter((p) => p.isActive && p.stock > (p.minStock || 0))
+        .length,
+      lowStock: all.filter(
+        (p) => p.isActive && p.stock > 0 && p.stock <= (p.minStock || 0)
+      ).length,
+      outOfStock: all.filter((p) => p.isActive && p.stock === 0).length,
+      inactive: all.filter((p) => !p.isActive).length,
+    };
+  });
   products = computed(() => {
     let filtered = [...this.allProducts()];
 

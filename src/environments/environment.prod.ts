@@ -1,11 +1,10 @@
 /**
- * Production Environment Configuration
+ * Development Environment Configuration
  */
 
 export const environment = {
   production: true,
-  apiUrl: 'https://api.yourapp.com/api',
-  apiTimeout: 30000, // 30 seconds
-  enableLogging: false,
-  enableDebug: false
+  apiUrl: 'http://localhost:3000/api',
+  useMockData: true,
+  appName: 'Product Inventory',
 };

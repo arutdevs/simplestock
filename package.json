@@ -1,5 +1,5 @@
 {
-  "name": "simple-stock",
+  "name": "product-inventory",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
