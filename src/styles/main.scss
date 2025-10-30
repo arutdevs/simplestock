@@ -1,5 +1,5 @@
 // =============================================================================
-// Main Styles - ไฟล์หลักสำหรับรวม styles ทั้งหมด
+// Main Styles - Custom Styles Only
 // Simple Stock Management System Theme
 // =============================================================================
 
@@ -7,64 +7,25 @@
 // 1. Variables & Configuration
 // -----------------------------------------------------------------------------
 @use "sass:color";
-@use 'variables' as *;
+@use "variables" as *;
 
 // -----------------------------------------------------------------------------
-// 2. Third-party Libraries (CSS files still use @import)
+// 2. Third-party Libraries
 // -----------------------------------------------------------------------------
-@import 'bootstrap/dist/css/bootstrap.min.css';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "@fortawesome/fontawesome-free/css/all.min.css";
 
 // -----------------------------------------------------------------------------
-// 3. Global Styles - Modern Inventory Theme
+// 3. Custom Styles (เฉพาะที่ Bootstrap ไม่มี)
 // -----------------------------------------------------------------------------
 
-// Reset & Base
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  font-size: $font-size-base;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
-}
-
+// ✅ Body - เพิ่มเฉพาะ min-height
 body {
-  font-family: $font-family-base;
-  font-size: $font-size-base;
-  font-weight: $font-weight-normal;
-  line-height: $line-height-base;
-  color: $text-primary;
-  background-color: $bg-secondary;
   min-height: 100vh;
+  background-color: $bg-secondary;
 }
 
-// Headings - สวยงาม อ่านง่าย
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-family-heading;
-  font-weight: $font-weight-bold;
-  line-height: $line-height-heading;
-  color: $text-primary;
-  margin-bottom: 0.5em;
-}
-
-// Links
-a {
-  color: $primary-color;
-  text-decoration: none;
-  transition: $transition-base;
-
-  &:hover {
-    color: color.adjust($primary-color, $lightness: -10%);
-    text-decoration: none;
-  }
-}
-
-// Scrollbar - สวยงาม ทันสมัย
+// ✅ Scrollbar (Bootstrap ไม่มี)
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -83,7 +44,7 @@ a {
   }
 }
 
-// Selection - สีตามธีม
+// ✅ Selection (Bootstrap ไม่มี)
 ::selection {
   background-color: color.adjust($primary-color, $alpha: -0.8);
   color: $text-primary;
@@ -94,118 +55,9 @@ a {
   color: $text-primary;
 }
 
-// Focus States - ชัดเจน
-:focus-visible {
-  outline: 2px solid $primary-color;
-  outline-offset: 2px;
-}
-
-// Container Styles
-// .container-fluid {
-//   padding: 0.5rem;
-// }
-
-// Card Styles - สำหรับแสดงเนื้อหา
-.card {
-  background: $bg-primary;
-  border: 1px solid $border-color;
-  border-radius: $border-radius-lg;
-  box-shadow: $box-shadow-sm;
-  transition: $transition-base;
-
-  &:hover {
-    box-shadow: $box-shadow;
-  }
-
-  .card-header {
-    background: $bg-secondary;
-    border-bottom: 1px solid $border-color;
-    padding: 1rem 1.5rem;
-    font-weight: $font-weight-semibold;
-    color: $text-primary;
-  }
-
-  .card-body {
-    padding: 1.5rem;
-  }
-}
-
-// Table Styles - สำหรับตารางสินค้า
-.table {
-  background: $bg-primary;
-  border-radius: $border-radius-lg;
-  overflow: hidden;
-
-  thead {
-    background: $bg-secondary;
-
-    th {
-      font-weight: $font-weight-semibold;
-      color: $text-primary;
-      border-bottom: 2px solid $border-color;
-      padding: 1rem;
-    }
-  }
-
-  tbody {
-    tr {
-      transition: $transition-base;
-
-      &:hover {
-        background: $bg-secondary;
-      }
-
-      td {
-        padding: 1rem;
-        border-bottom: 1px solid $border-light;
-        color: $text-primary;
-      }
-    }
-  }
-}
-
-// Button Styles - ปุ่มสวยๆ
+// ✅ Custom Button Overrides (เฉพาะที่ต้องการ override)
 .btn {
-  padding: 0.625rem 1.25rem;
-  border-radius: $border-radius;
-  font-weight: $font-weight-medium;
-  transition: $transition-base;
-  border: none;
-  cursor: pointer;
-
-  &.btn-primary {
-    background: $primary-color;
-    color: $text-white;
-
-    &:hover {
-      background: color.adjust($primary-color, $lightness: -10%);
-      box-shadow: $box-shadow;
-    }
-  }
-
-  &.btn-success {
-    background: $success-color;
-    color: $text-white;
-
-    &:hover {
-      background: color.adjust($success-color, $lightness: -10%);
-      box-shadow: $box-shadow;
-    }
-  }
-
-  &.btn-danger {
-    background: $danger-color;
-    color: $text-white;
-
-    &:hover {
-      background: color.adjust($danger-color, $lightness: -10%);
-      box-shadow: $box-shadow;
-    }
-  }
-
   &.btn-outline-primary {
-    background: transparent;
-    color: $primary-color;
     border: 2px solid $primary-color;
 
     &:hover {
@@ -213,42 +65,19 @@ a {
       color: $text-white;
     }
   }
-}
 
-// Form Controls - Input สวยๆ
-.form-control, .form-select {
-  padding: 0.625rem 1rem;
-  border: 1px solid $border-color;
-  border-radius: $border-radius;
-  font-size: $font-size-base;
-  color: $text-primary;
-  background: $bg-primary;
-  transition: $transition-base;
+  &.btn-outline-danger {
+    border: 2px solid $danger-color;
 
-  &:focus {
-    outline: none;
-    border-color: $primary-color;
-    box-shadow: 0 0 0 3px color.adjust($primary-color, $alpha: -0.9);
-  }
-
-  &::placeholder {
-    color: $text-muted;
+    &:hover {
+      background: $danger-color;
+      color: $text-white;
+    }
   }
 }
 
-.form-label {
-  font-weight: $font-weight-medium;
-  color: $text-primary;
-  margin-bottom: 0.5rem;
-}
-
-// Badge Styles - สำหรับสถานะสินค้า
+// ✅ Custom Badge Colors (Bootstrap ไม่มี)
 .badge {
-  padding: 0.375rem 0.75rem;
-  border-radius: $border-radius;
-  font-weight: $font-weight-semibold;
-  font-size: $font-size-sm;
-
   &.badge-stock-in {
     background: $stock-in-bg;
     color: $stock-in-color;
@@ -265,46 +94,16 @@ a {
   }
 }
 
-// Utility Classes
-.text-muted {
-  color: $text-muted !important;
-}
-
-.text-primary {
-  color: $primary-color !important;
-}
-
-.bg-light {
-  background-color: $bg-secondary !important;
-}
-
-.shadow-sm {
-  box-shadow: $box-shadow-sm !important;
-}
-
-.shadow {
-  box-shadow: $box-shadow !important;
-}
-
-.rounded {
-  border-radius: $border-radius !important;
-}
-
-.rounded-lg {
-  border-radius: $border-radius-lg !important;
-}
-
-// Responsive
-@media (max-width: 768px) {
-  body {
-    font-size: 14px;
+// ✅ Validation Icon Fix (แก้ปัญหาไอคอนวิ่ง)
+.form-control,
+.form-select {
+  &.is-invalid {
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+    background-position: right calc(0.375em + 0.1875rem) center !important;
   }
+}
 
-  .container-fluid {
-    padding: 1rem;
-  }
-
-  .table {
-    font-size: $font-size-sm;
-  }
+// ✅ Smooth Scroll (ถ้าต้องการ)
+html {
+  scroll-behavior: smooth;
 }

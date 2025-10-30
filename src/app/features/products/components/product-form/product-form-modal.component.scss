@@ -1,18 +1,56 @@
-// product-form-modal.component.scss (Refactored)
-// ลดขนาดลง ~70% โดยใช้ Bootstrap utilities แทน custom CSS
-// เก็บแค่ส่วนที่ Bootstrap ไม่มี
+// product-form-modal.component.scss
 
 // ==========================================
-// 🎨 CUSTOM STYLES ONLY
+// 🎯 MODAL SCROLL STYLES
 // ==========================================
 
-// Required field indicator
-.form-label.required::after {
-  content: " *";
-  color: var(--bs-danger);
+.modal-body {
+  max-height: calc(100vh - 200px); // ✅ จำกัดความสูงไม่เกินหน้าจอ
+  overflow-y: auto; // ✅ เลื่อนได้ภายใน
+  overflow-x: hidden;
+
+  // Custom scrollbar (optional)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--bs-light);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--bs-secondary);
+    border-radius: 4px;
+
+    &:hover {
+      background: var(--bs-dark);
+    }
+  }
 }
 
-// Upload Area - Custom Feature
+// ✅ ให้ header ติดด้านบน
+.modal-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+// ✅ ให้ footer ติดด้านล่าง (ถ้า footer อยู่นอก modal-body)
+.modal-footer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  z-index: 10;
+}
+
+// ==========================================
+// 📤 FILE UPLOAD STYLES
+// ==========================================
+
+// Upload Area - Standard Size
 .upload-area {
   position: relative;
   border: 2px dashed var(--bs-border-color);
@@ -48,67 +86,7 @@
   }
 }
 
-// Image Preview Box - Custom Feature
-.image-preview-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 200px;
-}
-
-// ==========================================
-// 📱 RESPONSIVE ADJUSTMENTS
-// ==========================================
-
-@media (max-width: 768px) {
-  .modal-footer {
-    flex-direction: column;
-
-    .btn {
-      width: 100%;
-    }
-  }
-}
-
-// ==========================================
-// ✨ OPTIONAL ENHANCEMENTS
-// ==========================================
-
-// Smooth modal animations (optional)
-.modal.fade .modal-dialog {
-  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-}
-
-// Enhanced form focus states (optional)
-.form-control:focus,
-.form-select:focus {
-  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
-}
-
-// Button hover effects (optional)
-.btn-primary:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.4);
-}
-
-.btn-danger:hover,
-.btn-outline-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-// Icon opacity in labels
-.form-label i {
-  opacity: 0.75;
-}
-
-.modal-header .btn-close {
-  opacity: 0.8;
-
-  &:hover {
-    opacity: 1;
-  }
-}
+// Upload Area - Compact Size
 .upload-area-compact {
   position: relative;
   border: 2px dashed var(--bs-border-color);
@@ -118,8 +96,6 @@
   background: var(--bs-light);
   transition: all 0.3s ease;
   cursor: pointer;
-  
-  // ✅ เพิ่ม flexbox เพื่อจัด content ให้อยู่กลางทั้งหมด
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,7 +115,6 @@
     transition: all 0.3s ease;
   }
 
-  // ✅ ปรับ paragraph ให้ไม่กว้างเกินไป
   p {
     margin: 0;
     max-width: 100%;
@@ -156,9 +131,66 @@
   }
 }
 
+// Image Preview Box - Standard Size
+.image-preview-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+// Image Preview Box - Compact Size
 .image-preview-box-compact {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 150px;
+}
+
+// ==========================================
+// 📱 RESPONSIVE ADJUSTMENTS
+// ==========================================
+
+@media (max-width: 768px) {
+  .modal-body {
+    max-height: calc(100vh - 180px); // ✅ ปรับสำหรับมือถือ
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-body {
+    max-height: calc(100vh - 150px); // ✅ ปรับสำหรับหน้าจอเตี้ย
+  }
+}
+
+.modal-content {
+  border-color: transparent;
+  background-color: transparent;
+  border-radius: 20px;
+
+  .modal-header {
+    border-radius: 20px 20px 0px 0px;
+    justify-content: space-between;
+    height: 55px;
+  }
+
+  .modal-footer {
+    border-radius: 0px 0px 20px 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .modal-footer {
+    flex-direction: column; /* ให้ปุ่มแสดงในแนวตั้ง */
+    align-items: center; /* จัดกึ่งกลาง */
+  }
+
+  .modal-footer .btn {
+    width: 100%; /* ให้ปุ่มขยายเต็มความกว้าง */
+    margin: 10px 0; /* เพิ่มระยะห่างระหว่างปุ่ม */
+    padding: 8px;
+  }
+  .btn-time-leave {
+    width: 100%;
+  }
 }

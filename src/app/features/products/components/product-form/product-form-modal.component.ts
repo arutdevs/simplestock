@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Output,
-  Input,
   OnInit,
   signal,
   inject,
@@ -19,8 +18,7 @@ import { Product } from '../../../../shared/models/product.model';
 import { Category } from '../../../../shared/models/category.model';
 import { MOCK_CATEGORIES } from '../../../../shared/models/product.mock';
 import { SweetAlertService } from '../../../../shared/services/alert-config.service';
-
-declare var bootstrap: any;
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-product-form-modal',
@@ -30,25 +28,65 @@ declare var bootstrap: any;
   styleUrls: ['./product-form-modal.component.scss'],
 })
 export class ProductFormModalComponent implements OnInit {
-  @Input() isOpen = false;
   @Output() save = new EventEmitter<Partial<Product>>();
   @Output() cancel = new EventEmitter<void>();
 
   private fb = inject(FormBuilder);
   private sweetAlert = inject(SweetAlertService);
+  private activeModal = inject(NgbActiveModal);
 
   productForm!: FormGroup;
   isEditMode = signal(false);
   currentProductId = signal<string | null>(null);
-  private modal: any;
 
   categories = signal<Category[]>(MOCK_CATEGORIES.filter((c) => c.isActive));
   imagePreview = signal<string | null>(null);
   selectedFile = signal<File | null>(null);
   selectedImageBase64 = signal<string | null>(null);
 
-  ngOnInit() {
+  private _productDetail?: Product;
+
+  // ✅ Setter
+  set productDetail(value: Product | undefined) {
+    console.log('🔵 Product detail received:', value);
+    this._productDetail = value;
+
+    if (value) {
+      // Edit Mode
+      this.isEditMode.set(true);
+      this.currentProductId.set(value.id!);
+
+      // ✅ เช็คว่า form พร้อมแล้วหรือยัง
+      if (this.productForm) {
+        this.patchFormValue(value);
+      }
+    } else {
+      // Create Mode
+      this.isEditMode.set(false);
+      this.currentProductId.set(null);
+
+      if (this.productForm) {
+        this.resetForm();
+      }
+    }
+  }
+
+  get productDetail(): Product | undefined {
+    return this._productDetail;
+  }
+
+  // ✅ สร้าง form ใน constructor แทน ngOnInit
+  constructor() {
     this.initForm();
+  }
+
+  ngOnInit() {
+    // ✅ ถ้ามีข้อมูลที่ถูกส่งมาแล้ว ให้ patch ตอนนี้
+    if (this._productDetail) {
+      this.patchFormValue(this._productDetail);
+    } else {
+      this.resetForm();
+    }
   }
 
   private initForm() {
@@ -68,6 +106,8 @@ export class ProductFormModalComponent implements OnInit {
   }
 
   private patchFormValue(product: Product) {
+    console.log('📝 Loading product to form:', product);
+
     this.productForm.patchValue({
       sku: product.sku,
       name: product.name,
@@ -85,6 +125,17 @@ export class ProductFormModalComponent implements OnInit {
     if (product.imageUrl) {
       this.imagePreview.set(product.imageUrl);
     }
+  }
+
+  private resetForm() {
+    this.productForm.reset({
+      isActive: true,
+      price: 0,
+      cost: 0,
+      stock: 0,
+      minStock: 0,
+    });
+    this.removeImage();
   }
 
   isFieldInvalid(fieldName: string): boolean {
@@ -106,55 +157,35 @@ export class ProductFormModalComponent implements OnInit {
   }
 
   onSubmit() {
-    if (this.productForm.valid) {
-      const formValue = this.productForm.value;
-
-      if (this.isEditMode() && this.currentProductId()) {
-        // Edit Mode
-        const productData: Partial<Product> = {
-          id: this.currentProductId()!,
-          sku: formValue.sku,
-          name: formValue.name,
-          description: formValue.description || undefined,
-          category: formValue.category,
-          unit: formValue.unit,
-          price: parseFloat(formValue.price),
-          cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
-          stock: parseInt(formValue.stock),
-          minStock: formValue.minStock
-            ? parseInt(formValue.minStock)
-            : undefined,
-          imageUrl:
-            this.selectedImageBase64() || formValue.imageUrl || undefined,
-          isActive: formValue.isActive,
-        };
-
-        this.save.emit(productData);
-      } else {
-        // Create Mode
-        const productData: Partial<Product> = {
-          sku: formValue.sku,
-          name: formValue.name,
-          description: formValue.description || undefined,
-          category: formValue.category,
-          unit: formValue.unit,
-          price: parseFloat(formValue.price),
-          cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
-          stock: parseInt(formValue.stock),
-          minStock: formValue.minStock
-            ? parseInt(formValue.minStock)
-            : undefined,
-          imageUrl: this.selectedImageBase64() || undefined,
-          isActive: formValue.isActive,
-        };
-
-        this.save.emit(productData);
-      }
-    } else {
-      Object.keys(this.productForm.controls).forEach((key) => {
-        this.productForm.get(key)?.markAsTouched();
-      });
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
     }
+
+    const formValue = this.productForm.value;
+
+    const productData: Partial<Product> = {
+      sku: formValue.sku,
+      name: formValue.name,
+      description: formValue.description || undefined,
+      category: formValue.category,
+      unit: formValue.unit,
+      price: parseFloat(formValue.price),
+      cost: formValue.cost ? parseFloat(formValue.cost) : undefined,
+      stock: parseInt(formValue.stock),
+      minStock: formValue.minStock ? parseInt(formValue.minStock) : undefined,
+      imageUrl: this.selectedImageBase64() || formValue.imageUrl || undefined,
+      isActive: formValue.isActive,
+    };
+
+    // ถ้าเป็น edit mode ให้ใส่ id
+    if (this.isEditMode() && this.currentProductId()) {
+      productData.id = this.currentProductId()!;
+    }
+
+    console.log('💾 Submitting product:', productData);
+
+    this.activeModal.close(productData);
   }
 
   async onClear() {
@@ -162,19 +193,13 @@ export class ProductFormModalComponent implements OnInit {
       title: 'ยืนยันการเคลียร์ข้อมูล',
       text: 'ต้องการเคลียร์ข้อมูลทั้งหมด?',
       icon: 'question',
-      confirmButtonText: 'ใช่, เคลียร์',
+      confirmButtonText: 'ใช่',
       cancelButtonText: 'ยกเลิก',
     });
 
     if (result.isConfirmed) {
-      this.productForm.reset({
-        isActive: true,
-        price: 0,
-        cost: 0,
-        stock: 0,
-        minStock: 0,
-      });
-      this.removeImage();
+      this.resetForm();
+      this.sweetAlert.showSuccess('เคลียร์ข้อมูลเรียบร้อย', '');
     }
   }
 
@@ -229,50 +254,16 @@ export class ProductFormModalComponent implements OnInit {
     if (fileInput) {
       fileInput.value = '';
     }
-  }
 
-  openModal(product?: Product) {
-    this.productForm.reset({
-      isActive: true,
-      price: 0,
-      cost: 0,
-      stock: 0,
-      minStock: 0,
-    });
-    this.removeImage();
-
-    if (product) {
-      // Edit Mode
-      this.isEditMode.set(true);
-      this.currentProductId.set(product.id!);
-      this.patchFormValue(product);
-    } else {
-      // Create Mode
-      this.isEditMode.set(false);
-      this.currentProductId.set(null);
-    }
-
-    const modalElement = document.getElementById('productFormModal');
-    if (modalElement) {
-      this.modal = new bootstrap.Modal(modalElement);
-      this.modal.show();
+    const fileInputChange = document.getElementById(
+      'imageFileChange'
+    ) as HTMLInputElement;
+    if (fileInputChange) {
+      fileInputChange.value = '';
     }
   }
 
   closeModal() {
-    if (this.modal) {
-      this.modal.hide();
-    }
-
-    this.productForm.reset({
-      isActive: true,
-      price: 0,
-      cost: 0,
-      stock: 0,
-      minStock: 0,
-    });
-    this.removeImage();
-    this.isEditMode.set(false);
-    this.currentProductId.set(null);
+    this.activeModal.dismiss('cancel');
   }
 }
