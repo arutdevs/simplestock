@@ -1,19 +1,12 @@
-/**
- * Error Handler Service
- * จัดการแสดง error messages
- */
-
 import { Injectable } from '@angular/core';
-import { Subject, Observable } from 'rxjs';
-
+import { Observable, Subject } from 'rxjs';
 export interface ErrorMessage {
   message: string;
   type: 'error' | 'warning' | 'info' | 'success';
   timestamp: Date;
 }
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ErrorHandlerService {
   private errorSubject = new Subject<ErrorMessage>();
@@ -30,7 +23,7 @@ export class ErrorHandlerService {
     this.errorSubject.next({
       message,
       type: 'error',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     console.error(`[ERROR] ${message}`);
   }
@@ -42,7 +35,7 @@ export class ErrorHandlerService {
     this.errorSubject.next({
       message,
       type: 'warning',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     console.warn(`[WARNING] ${message}`);
   }
@@ -54,7 +47,7 @@ export class ErrorHandlerService {
     this.errorSubject.next({
       message,
       type: 'info',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     console.info(`[INFO] ${message}`);
   }
@@ -66,7 +59,7 @@ export class ErrorHandlerService {
     this.errorSubject.next({
       message,
       type: 'success',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
     console.log(`[SUCCESS] ${message}`);
   }

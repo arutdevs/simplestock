@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, single } from 'rxjs/operators';
 
 import { Header } from '../../shared/layout/header/header';
 import { ProductFormModal } from '../../components/product-form-modal/product-form-modal';
@@ -30,18 +30,11 @@ export class ProductList implements OnInit {
   isLoading = signal(false);
   searchTerm = signal('');
   selectedCategory = signal('');
+  selectedStatus = signal('');
+
   productStats = computed(() => {
     const all = this.allProducts();
-    console.log({
-      total: all.length,
-      available: all.filter((p) => p.isActive && p.stock > (p.minStock || 0))
-        .length,
-      lowStock: all.filter(
-        (p) => p.isActive && p.stock > 0 && p.stock <= (p.minStock || 0)
-      ).length,
-      outOfStock: all.filter((p) => p.isActive && p.stock === 0).length,
-      inactive: all.filter((p) => !p.isActive).length,
-    });
+
     return {
       total: all.length,
       available: all.filter((p) => p.isActive && p.stock > (p.minStock || 0))
@@ -68,7 +61,27 @@ export class ProductList implements OnInit {
     if (this.selectedCategory()) {
       filtered = filtered.filter((p) => p.category === this.selectedCategory());
     }
-
+    const status = this.selectedStatus();
+    if (status) {
+      switch (status) {
+        case 'inactive':
+          filtered = filtered.filter((p) => !p.isActive);
+          break;
+        case 'outOfStock':
+          filtered = filtered.filter((p) => p.isActive && p.stock === 0);
+          break;
+        case 'lowStock':
+          filtered = filtered.filter(
+            (p) => p.isActive && p.stock > 0 && p.stock <= (p.minStock || 0)
+          );
+          break;
+        case 'available':
+          filtered = filtered.filter(
+            (p) => p.isActive && p.stock > (p.minStock || 0)
+          );
+          break;
+      }
+    }
     return filtered;
   });
 
@@ -149,52 +162,51 @@ export class ProductList implements OnInit {
 
   onEditProduct(id: string) {
     this.sweetAlert.showLoading('กำลังโหลดข้อมูลสินค้า...');
-
     this.productService
       .getById(id)
       .pipe(map((response) => response.data!))
       .subscribe({
         next: (product) => {
-          this.sweetAlert.close();
-
-          const modalRef = this.modalService.open(ProductFormModal, {
-            size: 'lg',
-            centered: true,
-            backdrop: 'static',
-            keyboard: false,
-          });
-
-          modalRef.componentInstance.productDetail = product;
-
-          modalRef.result
-            .then((formData: Product) => {
-              this.sweetAlert.showLoading('กำลังแก้ไขสินค้า...');
-
-              this.productService
-                .update(formData)
-                .pipe(map((response) => response.data!))
-                .subscribe({
-                  next: (updatedProduct) => {
-                    this.sweetAlert.close();
-                    this.loadData();
-                    this.sweetAlert.showSuccess(
-                      'แก้ไขสินค้าสำเร็จ!',
-                      `${updatedProduct.name} (SKU: ${updatedProduct.sku})`
-                    );
-                  },
-                  error: (error) => {
-                    this.sweetAlert.close();
-                    this.sweetAlert.showError(
-                      'เกิดข้อผิดพลาด',
-                      'ไม่สามารถแก้ไขสินค้าได้'
-                    );
-                    console.error('Error updating product:', error);
-                  },
-                });
-            })
-            .catch((reason) => {
-              console.log('Modal dismissed:', reason);
+          setTimeout(() => {
+            this.sweetAlert.close();
+            const modalRef = this.modalService.open(ProductFormModal, {
+              size: 'lg',
+              centered: true,
+              backdrop: 'static',
+              keyboard: false,
             });
+
+            modalRef.componentInstance.productDetail = product;
+            modalRef.result
+              .then((formData: Product) => {
+                this.sweetAlert.showLoading('กำลังแก้ไขสินค้า...');
+
+                this.productService
+                  .update(formData)
+                  .pipe(map((response) => response.data!))
+                  .subscribe({
+                    next: (updatedProduct) => {
+                      this.sweetAlert.close();
+                      this.loadData();
+                      this.sweetAlert.showSuccess(
+                        'แก้ไขสินค้าสำเร็จ!',
+                        `${updatedProduct.name} (SKU: ${updatedProduct.sku})`
+                      );
+                    },
+                    error: (error) => {
+                      this.sweetAlert.close();
+                      this.sweetAlert.showError(
+                        'เกิดข้อผิดพลาด',
+                        'ไม่สามารถแก้ไขสินค้าได้'
+                      );
+                      console.error('Error updating product:', error);
+                    },
+                  });
+              })
+              .catch((reason) => {
+                console.log('Modal dismissed:', reason);
+              });
+          }, 500);
         },
         error: (error) => {
           this.sweetAlert.close();

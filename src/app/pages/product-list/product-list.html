@@ -3,11 +3,133 @@
 
 <div class="container-fluid mt-3">
   <!-- Toolbar Section -->
-  <div class="card shadow-sm mb-3">
-    <div class="card-body py-2">
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+          <div
+            class="card h-100 bg-primary bg-opacity-10 text-primary border border-primary hover-lift"
+            (click)="selectedStatus.set('all')"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
+              >
+                <div class="flex-grow-1">
+                  <h6 class="text-primary fw-semibold mb-2">สินค้าทั้งหมด</h6>
+                  <h2 class="fw-bold mb-0">{{ productStats().total }}</h2>
+                </div>
+                <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                  <i class="fas fa-boxes fs-4 text-primary"></i>
+                </div>
+              </div>
+              <div class="d-flex align-items-center text-primary small">
+                <i class="fas fa-cube me-2"></i>
+                <span>จำนวนสินค้าทั้งหมด</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- สินค้าหมด -->
+        <div class="col-lg-3 col-md-6">
+          <div
+            class="card h-100 bg-danger bg-opacity-10 text-danger border-danger hover-lift"
+            (click)="selectedStatus.set('outOfStock')"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
+              >
+                <div class="flex-grow-1">
+                  <h6
+                    class="text-danger text-uppercase fw-semibold mb-2"
+                    style="font-size: 0.75rem; letter-spacing: 0.5px"
+                  >
+                    สินค้าหมด
+                  </h6>
+                  <h2 class="fw-bold mb-0">{{ productStats().inactive }}</h2>
+                </div>
+                <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                  <i class="fas fa-box-open fs-4 text-danger"></i>
+                </div>
+              </div>
+              <div class="d-flex align-items-center text-danger small">
+                <i class="fas fa-times-circle me-2"></i>
+                <span>ต้องเติมสต็อก</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- คงเหลือต่ำ -->
+        <div class="col-lg-3 col-md-6">
+          <div
+            class="card h-100 bg-warning bg-opacity-10 text-warning border-warning hover-lift"
+            (click)="selectedStatus.set('lowStock')"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
+              >
+                <div class="flex-grow-1">
+                  <h6
+                    class="text-warning text-uppercase fw-semibold mb-2"
+                    style="font-size: 0.75rem; letter-spacing: 0.5px"
+                  >
+                    คงเหลือต่ำ
+                  </h6>
+                  <h2 class="fw-bold mb-0">{{ productStats().lowStock }}</h2>
+                </div>
+                <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                  <i class="fas fa-battery-quarter fs-4 text-warning"></i>
+                </div>
+              </div>
+              <div class="d-flex align-items-center text-warning small">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <span>ใกล้หมดแล้ว</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- พร้อมขาย -->
+        <div class="col-lg-3 col-md-6">
+          <div
+            class="card h-100 bg-success bg-opacity-10 text-success border-success hover-lift"
+            (click)="selectedStatus.set('available')"
+          >
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-start mb-3"
+              >
+                <div class="flex-grow-1">
+                  <h6
+                    class="text-success text-uppercase fw-semibold mb-2"
+                    style="font-size: 0.75rem; letter-spacing: 0.5px"
+                  >
+                    พร้อมขาย
+                  </h6>
+                  <h2 class="fw-bold mb-0">{{ productStats().available }}</h2>
+                </div>
+                <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                  <i class="fas fa-check-double fs-4 text-success"></i>
+                </div>
+              </div>
+              <div class="d-flex align-items-center text-success small">
+                <i class="fas fa-check-circle me-2"></i>
+                <span>สถานะปกติ</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body p-2">
       <div class="row g-2 align-items-center">
         <!-- Stats -->
-        <div class="col-auto">
+        <!-- <div class="col-auto">
           <span
             class="badge bg-primary bg-opacity-10 text-primary border border-primary px-3 py-2"
           >
@@ -24,7 +146,7 @@
             <strong class="fs-6">{{ categories().length }}</strong>
             <small class="ms-1">หมวดหมู่</small>
           </span>
-        </div>
+        </div> -->
 
         <!-- Divider -->
         <div class="col-auto d-none d-md-block">
@@ -79,169 +201,179 @@
     </div>
   </div>
 
-  <!-- Product Grid -->
-  <div class="row g-3">
-    @for (product of products(); track product.id) {
-    <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-      <div class="card h-100 shadow-sm product-card-hover">
-        <!-- Product Image -->
-        <div
-          class="position-relative bg-light"
-          style="height: 160px; overflow: hidden"
-        >
-          @if (product.imageUrl) {
-          <img
-            [src]="product.imageUrl"
-            class="card-img-top h-100 w-100 object-fit-cover"
-            [alt]="product.name"
-          />
-          } @else {
-          <div
-            class="d-flex align-items-center justify-content-center h-100 bg-primary bg-opacity-10"
-          >
-            <i class="fas fa-box fa-3x text-primary opacity-25"></i>
-          </div>
-          }
-
-          <!-- Status Badge -->
-          <span
-            class="position-absolute top-0 end-0 m-2 badge"
-            [ngClass]="{
-              'bg-secondary': !product.isActive,
-              'bg-success':
-                product.isActive && product.stock > (product.minStock || 0),
-              'bg-warning text-dark':
-                product.isActive &&
-                product.stock > 0 &&
-                product.stock <= (product.minStock || 0),
-              'bg-danger': product.isActive && product.stock === 0
-            }"
-          >
-            <i
-              class="fas me-1"
-              [ngClass]="{
-                'fa-ban': !product.isActive,
-                'fa-check-circle':
-                  product.isActive && product.stock > (product.minStock || 0),
-                'fa-exclamation-triangle':
-                  product.isActive &&
-                  product.stock > 0 &&
-                  product.stock <= (product.minStock || 0),
-                'fa-times-circle': product.isActive && product.stock === 0
-              }"
-            ></i>
-            @if (!product.isActive) {
-            <span>ปิดใช้งาน</span>
-            } @else if (product.stock === 0) {
-            <span>สินค้าหมด</span>
-            } @else if (product.stock > 0 && product.stock <= (product.minStock
-            || 0)) {
-            <span>คงเหลือต่ำ</span>
-            } @else {
-            <span>พร้อมขาย</span>
-            }
-          </span>
-        </div>
-
-        <!-- Card Body -->
-        <div class="card-body d-flex flex-column">
-          <!-- Category & SKU -->
-          <div class="mb-2">
-            <span
-              class="badge bg-primary bg-opacity-10 text-primary border border-primary me-2"
+  <!-- Product Grid 
+   -->
+  <div class="card">
+    <div class="card-body p-2">
+      <div class="row g-3">
+        @for (product of products(); track product.id) {
+        <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <div class="card h-100 shadow-sm product-card-hover">
+            <!-- Product Image -->
+            <div
+              class="position-relative bg-light"
+              style="height: 160px; overflow: hidden"
             >
-              <i class="fas fa-layer-group me-1"></i>{{ product.category }}
-            </span>
-            <small class="text-muted">
-              <i class="fas fa-hashtag me-1"></i>{{ product.sku }}
-            </small>
-          </div>
+              @if (product.imageUrl) {
+              <img
+                [src]="product.imageUrl"
+                class="card-img-top h-100 w-100 object-fit-cover"
+                [alt]="product.name"
+              />
+              } @else {
+              <div
+                class="d-flex align-items-center justify-content-center h-100 bg-primary bg-opacity-10"
+              >
+                <i class="fas fa-box fa-3x text-primary opacity-25"></i>
+              </div>
+              }
 
-          <!-- Product Name -->
-          <h6 class="card-title fw-bold mb-2">{{ product.name }}</h6>
-
-          <!-- Description -->
-          @if (product.description) {
-          <p class="card-text text-muted small mb-2 lh-sm">
-            {{ product.description }}
-          </p>
-          }
-
-          <!-- Price & Stock -->
-          <div
-            class="d-flex justify-content-between align-items-center mb-2 mt-auto"
-          >
-            <span class="fs-5 fw-bold text-primary">
-              ฿{{
-                product.price.toLocaleString("th-TH", {
-                  minimumFractionDigits: 2
-                })
-              }}
-            </span>
-            <span
-              class="badge"
-              [ngClass]="{
-                'bg-success': product.stock > (product.minStock || 0),
-                'bg-warning text-dark':
-                  product.stock > 0 && product.stock <= (product.minStock || 0),
-                'bg-danger': product.stock === 0
-              }"
-            >
-              <i
-                class="fas me-1"
+              <!-- Status Badge -->
+              <span
+                class="position-absolute top-0 end-0 m-2 badge"
                 [ngClass]="{
-                  'fa-box': product.stock > (product.minStock || 0),
-                  'fa-exclamation-triangle':
+                  'bg-secondary': !product.isActive,
+                  'bg-success':
+                    product.isActive && product.stock > (product.minStock || 0),
+                  'bg-warning text-dark':
+                    product.isActive &&
                     product.stock > 0 &&
                     product.stock <= (product.minStock || 0),
-                  'fa-ban': product.stock === 0
+                  'bg-danger': product.isActive && product.stock === 0
                 }"
-              ></i>
-              {{ product.stock }}
-            </span>
-          </div>
+              >
+                <i
+                  class="fas me-1"
+                  [ngClass]="{
+                    'fa-ban': !product.isActive,
+                    'fa-check-circle':
+                      product.isActive &&
+                      product.stock > (product.minStock || 0),
+                    'fa-exclamation-triangle':
+                      product.isActive &&
+                      product.stock > 0 &&
+                      product.stock <= (product.minStock || 0),
+                    'fa-times-circle': product.isActive && product.stock === 0
+                  }"
+                ></i>
+                @if (!product.isActive) {
+                <span>ปิดใช้งาน</span>
+                } @else if (product.stock === 0) {
+                <span>สินค้าหมด</span>
+                } @else if (product.stock > 0 && product.stock <=
+                (product.minStock || 0)) {
+                <span>คงเหลือต่ำ</span>
+                } @else {
+                <span>พร้อมขาย</span>
+                }
+              </span>
+            </div>
 
-          <!-- Edit Button -->
-          <!-- Edit & Delete Buttons (ลบเป็นไอคอน) -->
-          <!-- ✅ แนะนำแบบนี้ -->
-          <div class="d-flex gap-2">
-            <button
-              class="btn btn-outline-primary btn-sm flex-fill"
-              (click)="onEditProduct(product.id!)"
-            >
-              <i class="fas fa-edit me-1"></i>แก้ไข
-            </button>
-            <button
-              class="btn btn-outline-danger btn-sm flex-fill"
-              (click)="onDeleteProduct(product.id!)"
-              title="ลบสินค้า"
-            >
-              <i class="fas fa-trash"></i> ลบสินค้า
-            </button>
+            <!-- Card Body -->
+            <div class="card-body d-flex flex-column">
+              <!-- Category & SKU -->
+              <div class="mb-2">
+                <span
+                  class="badge bg-primary bg-opacity-10 text-primary border border-primary me-2"
+                >
+                  <i class="fas fa-layer-group me-1"></i>{{ product.category }}
+                </span>
+                <small class="text-muted">
+                  <i class="fas fa-hashtag me-1"></i>{{ product.sku }}
+                </small>
+              </div>
+
+              <!-- Product Name -->
+              <h6 class="card-title fw-bold mb-2">{{ product.name }}</h6>
+
+              <!-- Description -->
+              @if (product.description) {
+              <p class="card-text text-muted small mb-2 lh-sm">
+                {{ product.description }}
+              </p>
+              }
+
+              <!-- Price & Stock -->
+              <div
+                class="d-flex justify-content-between align-items-center mb-2 mt-auto"
+              >
+                <span class="fs-5 fw-bold text-primary">
+                  ฿{{
+                    product.price.toLocaleString("th-TH", {
+                      minimumFractionDigits: 2
+                    })
+                  }}
+                </span>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': product.stock > (product.minStock || 0),
+                    'bg-warning text-dark':
+                      product.stock > 0 &&
+                      product.stock <= (product.minStock || 0),
+                    'bg-danger': product.stock === 0
+                  }"
+                >
+                  <i
+                    class="fas me-1"
+                    [ngClass]="{
+                      'fa-box': product.stock > (product.minStock || 0),
+                      'fa-exclamation-triangle':
+                        product.stock > 0 &&
+                        product.stock <= (product.minStock || 0),
+                      'fa-ban': product.stock === 0
+                    }"
+                  ></i>
+                  {{ product.stock }}
+                </span>
+              </div>
+
+              <!-- Edit Button -->
+              <!-- Edit & Delete Buttons (ลบเป็นไอคอน) -->
+              <!-- ✅ แนะนำแบบนี้ -->
+              <div class="d-flex gap-2">
+                <button
+                  class="btn btn-outline-primary btn-sm flex-fill"
+                  (click)="onEditProduct(product.id!)"
+                >
+                  <i class="fas fa-edit me-1"></i>แก้ไข
+                </button>
+                <button
+                  class="btn btn-outline-danger btn-sm flex-fill"
+                  (click)="onDeleteProduct(product.id!)"
+                  title="ลบสินค้า"
+                >
+                  <i class="fas fa-trash"></i> ลบสินค้า
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    }
+        }
 
-    <!-- Empty State -->
-    @if (products().length === 0) {
-    <div class="col-12">
-      <div class="text-center py-5">
-        <i class="fas fa-box-open display-1 text-muted opacity-25 mb-3"></i>
-        @if (searchTerm() || selectedCategory()) {
-        <h5 class="text-muted">ไม่พบสินค้าที่ตรงกับเงื่อนไข</h5>
-        <p class="text-muted">ลองเปลี่ยนตัวกรองหรือค้นหาใหม่</p>
-        <button class="btn btn-outline-primary btn-sm" (click)="clearFilters()">
-          <i class="fas fa-times me-1"></i>ล้างตัวกรอง
-        </button>
-        } @else {
-        <h5 class="text-muted">ยังไม่มีสินค้า</h5>
-        <p class="text-muted">คลิกปุ่ม "เพิ่มสินค้า" เพื่อเริ่มต้น</p>
+        <!-- Empty State -->
+        @if (products().length === 0) {
+        <div class="col-12">
+          <div class="text-center py-5">
+            <i class="fas fa-box-open display-1 text-muted opacity-25 mb-3"></i>
+            @if (searchTerm() || selectedCategory()) {
+            <h5 class="text-muted">ไม่พบสินค้าที่ตรงกับเงื่อนไข</h5>
+            <p class="text-muted">ลองเปลี่ยนตัวกรองหรือค้นหาใหม่</p>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              (click)="clearFilters()"
+            >
+              <i class="fas fa-times me-1"></i>ล้างตัวกรอง
+            </button>
+            } @else {
+            <h5 class="text-muted">ยังไม่มีสินค้า</h5>
+            <p class="text-muted">คลิกปุ่ม "เพิ่มสินค้า" เพื่อเริ่มต้น</p>
+            }
+          </div>
+        </div>
         }
       </div>
     </div>
-    }
   </div>
 
   <!-- Pagination -->
